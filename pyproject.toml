@@ -12,7 +12,6 @@ streamlit = "^1.39.0"
 streamlit-geolocation = "^0.0.10"
 geopy = "^2.4.1"
 pyyaml = "^6.0.2"
-streamlit-server-state = "^0.17.1"
 
 
 [tool.poetry.group.dev.dependencies]
