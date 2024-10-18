@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "scavenger"
+version = "0.1.0"
+description = ""
+authors = ["Dennis Bakhuis <git@bakhuis.nu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.9.0"
+streamlit = "^1.38.0"
+streamlit-geolocation = "^0.0.10"
+geopy = "^2.4.1"
+pyyaml = "^6.0.2"
+streamlit-server-state = "^0.17.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^5.0.0"
+coverage = "^7.6.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.mypy]
+exclude = ['tests/', 'scripts/']
+ignore_missing_imports = true
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = false
+check_untyped_defs = true
+no_implicit_reexport = true
+
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = ["D", "W", "B", "Q"]
+unfixable = ["D", "B"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.bandit]
+exclude_dirs = ["tests", "scripts"]
+skips = ["B101", "B404", "B410"]
