@@ -45,3 +45,22 @@ class Game(BaseModel):
 
         return game
 
+    def get_location_by_name(self, location_name: str) -> Location:
+        """
+        Get a location by name.
+
+        Parameters
+        ----------
+        location_name : str
+            The name of the location to get.
+
+        Returns
+        -------
+        Location
+            The location object.
+        """
+        for location in self.locations:
+            if location.name == location_name:
+                return location
+
+        raise ValueError(f"Location '{location_name}' not found in the game.")

@@ -3,7 +3,6 @@ import re
 from pathlib import Path
 
 from streamlit_geolocation import streamlit_geolocation
-from streamlit_server_state import server_state, server_state_lock
 from geopy.distance import geodesic
 import streamlit as st
 
@@ -11,21 +10,13 @@ from models import State, Game
 from helpers import calculate_bearing, determine_next_location
 
 
-STATE_FILE = "data/application_state.json"
-GAME_FILE = "data/game.json"
-QUESTION_PATH = "data/questions"
+STATE_FILE = "data/application_state.yaml"
+GAME_FILE = "data/game.yaml"
 
 
 # Get game files
-game = Game.from_yaml_file(GAME_FILE)
-with server_state_lock["state"]:
-    if "state" not in server_state:
-        server_state.state = State.from_yaml_file(
-            file_path=STATE_FILE,
-            game=game,
-        )
-
-    state = server_state.state
+game = Game.from_yaml_file(file_path=GAME_FILE)
+state = State.from_yaml_file(file_path=STATE_FILE, game=game)
 
 
 #############
@@ -67,10 +58,11 @@ def scavenger(team_name):
         st.subheader("Location and direction")
 
         current_location = (location.get("latitude"), location.get("longitude"))
-        goal_location = (team_state.goal.latitude, team_state.goal.longitude)
+        goal_location = game.get_location_by_name(team_state.goal_location_name)
+        goal_coordinates = (goal_location.latitude, goal_location.longitude)
 
-        distance = geodesic(current_location, goal_location).meters
-        bearing = calculate_bearing(current_location, goal_location)
+        distance = geodesic(current_location, goal_coordinates).meters
+        bearing = calculate_bearing(current_location, goal_coordinates)
 
         location_column_1, location_column_2 = st.columns([1, 1])
         with location_column_1:
@@ -87,30 +79,28 @@ def scavenger(team_name):
     st.markdown("---")
     if distance is not None and distance <= game.radius:
 
-        description_file = Path(f"{QUESTION_PATH}/{team_state.goal.description_file}")
-        image_file = description_file.parent / f"{description_file.stem}.png"
+        base_question_path = Path(GAME_FILE).parent
+        image_file = base_question_path / goal_location.image
 
-        if description_file.exists():
-            with open(f"{QUESTION_PATH}/{team_state.goal.description_file}", "r") as file:
-                st.markdown(file.read())
-            if image_file.exists():
-                st.image(str(image_file), use_column_width=True)
-        else:
-            st.subheader("Question")
-            st.write(f"Question: {team_state.goal.question}")
+        st.header("Question")
+        st.subheader(goal_location.name)
+        st.markdown(goal_location.description)
+        if image_file.exists():
+            st.image(str(image_file), use_column_width=True)
 
         st.subheader("Answer:")
-        for option in team_state.goal.options:
+        for option in goal_location.options:
             if st.button(option.option):
-                team_state.solved[team_state.goal.name] = option.score
+                team_state.solved[goal_location.name] = option.score
 
                 if len(game.locations) - len(team_state.solved) > 0:
-                    team_state.goal = determine_next_location(
+                    next_goal_location_name = determine_next_location(
                         team_state=team_state,
                         game=game,
                         previous_score=option.score,
                         current_location=current_location,
                     )
+                    team_state.goal_location_name = next_goal_location_name
 
                 state.update_team(team_name, team_state)
                 st.rerun()

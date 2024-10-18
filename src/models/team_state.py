@@ -1,8 +1,6 @@
 """Model for the state of a team in the game."""
 from pydantic import BaseModel
 
-from .location import Location
-
 
 class TeamState(BaseModel):
     """
@@ -19,5 +17,5 @@ class TeamState(BaseModel):
     """
 
     name: str
-    goal: Location
+    goal_location_name: str
     solved: dict[str, int] = {}

@@ -42,7 +42,7 @@ def mock_team_state() -> TeamState:
     """Create a mock TeamState object for testing."""
     return TeamState(
         name="Team X",
-        goal=create_location("Location A", 0.0, 0.0),
+        goal_location_name="Location A",
         solved={},
     )
 
@@ -54,12 +54,12 @@ def test_next_location_positive_score(mock_team_state, mock_game):
 
     # Expect the closest location to be "Location A" it is exactly at (0.0, 0.0)
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location A"
+    assert next_location == "Location A"
 
     # Set the "Location A" as solved; expect the next closest location to be "Location D"
     mock_team_state.solved["Location A"] = 1
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location D"
+    assert next_location == "Location D"
 
 
 def test_next_location_negative_score(mock_team_state, mock_game):
@@ -69,12 +69,12 @@ def test_next_location_negative_score(mock_team_state, mock_game):
 
     # Expect the farthest location to be "Location C"
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location C"
+    assert next_location == "Location C"
 
     # Set "Location C" as solved; expect the next farthest location to be "Location B"
     mock_team_state.solved["Location C"] = 1
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location B"
+    assert next_location == "Location B"
 
 
 def test_next_location_zero_score(mock_team_state, mock_game):
@@ -85,13 +85,13 @@ def test_next_location_zero_score(mock_team_state, mock_game):
     # Set a fixed random seed to make the test deterministic
     seed(1)
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location D"
+    assert next_location == "Location D"
 
     # Set "Location C" as solved and test again
     mock_team_state.solved["Location C"] = 1
     seed(1)
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location A"
+    assert next_location == "Location A"
 
 
 def test_no_unsolved_locations(mock_team_state, mock_game):
@@ -118,12 +118,12 @@ def test_next_location_unsolved(mock_team_state, mock_game):
 
     # Expect "Location A" to be chosen first, since no locations are solved
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location A"
+    assert next_location == "Location A"
 
     # Set "Location A" as solved and expect "Location D" to be chosen next
     mock_team_state.solved["Location A"] = 1
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location D"
+    assert next_location == "Location D"
 
 
 def test_all_locations_unsolved(mock_team_state, mock_game):
@@ -133,4 +133,4 @@ def test_all_locations_unsolved(mock_team_state, mock_game):
 
     # Since no locations are solved, the closest location should be "Location A"
     next_location = determine_next_location(mock_team_state, mock_game, previous_score, current_location)
-    assert next_location.name == "Location A"
+    assert next_location == "Location A"

@@ -46,14 +46,14 @@ def test_team_exists(state_file, game):
     state = State(file_path=state_file, game=game)
     assert not state.team_exists("Team1")
 
-    state.teams["Team1"] = TeamState(name="Team1", goal=game.locations[0])
+    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
     assert state.team_exists("Team1")
 
 
 def test_get_team_state(state_file, game):
     """Test the `get_team_state` method to ensure it returns the correct `TeamState`."""
     state = State(file_path=state_file, game=game)
-    state.teams["Team1"] = TeamState(name="Team1", goal=game.locations[0])
+    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
 
     assert state.get_team_state("Team1").name == "Team1"
 
@@ -68,7 +68,7 @@ def test_get_or_create_team(state_file, game):
     # Test team creation
     team_state = state.get_or_create_team("Team1")
     assert team_state.name == "Team1"
-    assert team_state.goal == game.locations[0]
+    assert team_state.goal_location_name == game.locations[0].name
     assert state.teams["Team1"].name == "Team1"
 
     # Test existing team retrieval
@@ -86,7 +86,7 @@ def test_state_from_yaml(state_file, game):
     assert state.teams == {}
 
     # Test saving the state
-    state.teams["Team1"] = TeamState(name="Team1", goal=game.locations[0])
+    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
     state.save()
 
     # Now test loading from an existing file
@@ -98,7 +98,7 @@ def test_state_from_yaml(state_file, game):
 def test_save_state(state_file, game):
     """Test the `save` method to ensure the state is correctly saved to a YAML file."""
     state = State(file_path=state_file, game=game)
-    state.teams["Team1"] = TeamState(name="Team1", goal=game.locations[0])
+    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
 
     state.save()
 
@@ -110,7 +110,7 @@ def test_save_state(state_file, game):
 def test_update_team(state_file, game):
     """Test the `update_team` method to ensure the team state is updated and saved."""
     state = State(file_path=state_file, game=game)
-    new_team_state = TeamState(name="Team1", goal=game.locations[0])
+    new_team_state = TeamState(name="Team1", goal_location_name=game.locations[0].name)
 
     state.update_team("Team1", new_team_state)
 

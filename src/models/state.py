@@ -158,9 +158,10 @@ class State(BaseModel):
             The state of the team.
         """
         if not self.team_exists(team_name):
+            goal_location = choice(self._game.locations)
             self.teams[team_name] = TeamState(
                 name=team_name,
-                goal=choice(self._game.locations),
+                goal_location_name=goal_location.name,
             )
 
             self.save()

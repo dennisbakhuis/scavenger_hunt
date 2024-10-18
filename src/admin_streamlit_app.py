@@ -46,7 +46,7 @@ def scavenger_admin():
         st.write(f"Number of active teams: {state.n_active_teams}")
 
         for location in game.locations:
-            n_teams_solved = sum(1 for team in state.teams.values() if team.goal.name == location.name)
+            n_teams_solved = sum(1 for team in state.teams.values() if team.goal_location_name.name == location.name)
             st.write(f"Location: {location.name}, Solved by {n_teams_solved} teams")
 
     with questions_tab:

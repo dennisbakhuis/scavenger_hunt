@@ -2,7 +2,7 @@
 from random import choice
 from geopy.distance import geodesic
 
-from models import Game, Location, TeamState
+from models import Game, TeamState
 
 
 def determine_next_location(
@@ -10,7 +10,7 @@ def determine_next_location(
     game: Game,
     previous_score: int,
     current_location: tuple[float, float],
-) -> Location:
+) -> str:
     """
     Determine the next location for a team based on their current state, game information, and previous score.
 
@@ -40,8 +40,10 @@ def determine_next_location(
     )
 
     if previous_score > 0:
-        return sorted_by_distance[0]
+        next_location = sorted_by_distance[0]
     elif previous_score < 0:
-        return sorted_by_distance[-1]
+        next_location = sorted_by_distance[-1]
+    else:
+        next_location = choice(sorted_by_distance)
 
-    return choice(sorted_by_distance)
+    return next_location.name
