@@ -1,6 +1,4 @@
 """Advanced Analytics scavenger hunt application."""
-import os
-import json
 from pathlib import Path
 
 import streamlit as st
@@ -8,46 +6,46 @@ import streamlit as st
 from models import State, Game
 
 
-STATE_FILE = "data/application_state.json"
-GAME_FILE = "data/game.json"
-QUESTION_PATH = "data/questions"
+STATE_FILE = "data/application_state.yaml"
+GAME_FILE = "data/game.yaml"
 
 
-if 'index' not in st.session_state:
+# Get game files
+game = Game.from_yaml_file(file_path=GAME_FILE)
+state = State.from_yaml_file(file_path=STATE_FILE, game=game)
+
+# Reload variables from state
+if "index" not in st.session_state:
     st.session_state.index = 0
-
-def load_game_data():
-    with open(GAME_FILE, "r") as file:
-        game_data_dict = json.load(file)
-        return Game.model_validate(game_data_dict)
-
-
-def load_application_state() -> State:
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as file:
-            state_data = json.load(file)
-            return State.model_validate(state_data)
-    else:
-        return State()
 
 
 #############
 # Scavenger #
 #############
 def scavenger_admin():
-    game = load_game_data()
-    state = load_application_state()
-
+    """Scavenger hunt admin interface."""
     st.title("Scavenger hunt ADMIN 🕵")
     overview_tab, questions_tab, about_tab = st.tabs(["Overview", "Questions", "About"])
 
     with overview_tab:
         st.header("Overview")
-        st.write(f"Number of active teams: {state.n_active_teams}")
+        st.write(f"Number of registered teams: {state.n_active_teams}")
 
-        for location in game.locations:
-            n_teams_solved = sum(1 for team in state.teams.values() if team.goal_location_name.name == location.name)
-            st.write(f"Location: {location.name}, Solved by {n_teams_solved} teams")
+        puzzle_statistics = []
+        for ix, location in enumerate(game.locations):
+            n_teams_solved = sum(
+                1
+                for team in state.teams.values()
+                if team.goal_location_name == location.name
+            )
+            puzzle_statistics.append({
+                "Id": ix + 1,
+                "Location": location.name,
+                "Teams solved": n_teams_solved,
+
+            })
+
+        st.dataframe(puzzle_statistics)
 
     with questions_tab:
 
@@ -69,18 +67,14 @@ def scavenger_admin():
 
         location = game.locations[st.session_state.index]
 
-        description_file = Path(f"{QUESTION_PATH}/{location.description_file}")
-        image_file = description_file.parent / f"{description_file.stem}.png"
+        base_question_path = Path(GAME_FILE).parent
+        image_file = base_question_path / location.image
 
-        if description_file.exists():
-            with open(f"{QUESTION_PATH}/{location.description_file}", "r") as file:
-                st.markdown(file.read())
-            if image_file.exists():
-                st.image(str(image_file), use_column_width=True)
-        else:
-            st.subheader("Question")
-            st.write(f"Question: {location.question}")
-            
+        st.subheader(location.name)
+        st.markdown(location.description)
+        if image_file.exists():
+            st.image(str(image_file), use_column_width=True)
+
         st.subheader("Answer:")
         for option in location.options:
             st.write(f"Option: {option.option}, Score: {option.score}")
