@@ -31,21 +31,33 @@ def scavenger_admin():
         st.header("Overview")
         st.write(f"Number of registered teams: {state.n_active_teams}")
 
+        st.subheader("Puzzle statistics")
         puzzle_statistics = []
         for ix, location in enumerate(game.locations):
             n_teams_solved = sum(
                 1
                 for team in state.teams.values()
-                if team.goal_location_name == location.name
+                if location.name in team.solved
             )
             puzzle_statistics.append({
                 "Id": ix + 1,
                 "Location": location.name,
                 "Teams solved": n_teams_solved,
-
+                "Teams unsolved": state.n_active_teams - n_teams_solved,
             })
 
         st.dataframe(puzzle_statistics)
+
+        st.subheader("Team statistics")
+        team_statistics = []
+        for team in state.teams.values():
+            team_statistics.append({
+                "Team": team.name,
+                "Score": sum([score for score in team.solved.values()]),
+                "Solved": len(team.solved),
+            })
+
+        st.dataframe(team_statistics)
 
     with questions_tab:
 

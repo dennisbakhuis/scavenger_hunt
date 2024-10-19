@@ -1,17 +1,19 @@
 """Advanced Analytics scavenger hunt application."""
 import re
 from pathlib import Path
+import time
 
 from streamlit_geolocation import streamlit_geolocation
 from geopy.distance import geodesic
 import streamlit as st
 
 from models import State, Game
-from helpers import calculate_bearing, determine_next_location
+from helpers import calculate_bearing, determine_next_location, log_ndjson
 
 
 STATE_FILE = "data/application_state.yaml"
 GAME_FILE = "data/game.yaml"
+LOCATION_LOG_FILE = "data/location_log.ndjson"
 
 
 # Get game files
@@ -54,6 +56,16 @@ def scavenger(team_name):
 
     ## Location information
     if location is not None and location.get("latitude") is not None:
+        # Log location
+        log_ndjson(
+            file_path=LOCATION_LOG_FILE,
+            team_name=team_name,
+            timestamp=time.strftime("%Y-%m-%d %H:%M:%S"),
+            latitude=location.get("latitude"),
+            longitude=location.get("longitude"),
+            solved=len(team_state.solved),
+            current_goal=team_state.goal_location_name,
+        )
         st.markdown("---")
         st.subheader("Location and direction")
 
