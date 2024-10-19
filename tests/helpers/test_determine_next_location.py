@@ -4,7 +4,7 @@ from random import seed
 import pytest
 from unittest.mock import MagicMock
 
-from models import Location, TeamState, Game, AnswerOption
+from models import Location, TeamState, Game, AnswerOption, QuestionType
 from helpers.determine_next_location import determine_next_location
 
 
@@ -18,9 +18,10 @@ def create_location(
         name=name,
         latitude=latitude,
         longitude=longitude,
-        description="A test location.",
+        question_type=QuestionType.MultipleChoice,
+        question="A test location.",
         image="test_image.png",
-        options=[AnswerOption(option="Option A", score=10)],
+        answer=[AnswerOption(option="Option A", score=10)],
     )
 
 

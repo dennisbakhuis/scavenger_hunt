@@ -1,6 +1,5 @@
 """Advanced Analytics scavenger hunt application."""
 import re
-from pathlib import Path
 import time
 
 from streamlit_geolocation import streamlit_geolocation
@@ -8,7 +7,7 @@ from geopy.distance import geodesic
 import streamlit as st
 
 from models import State, Game
-from helpers import calculate_bearing, determine_next_location, log_ndjson
+from helpers import calculate_bearing, log_ndjson, handle_question
 
 
 STATE_FILE = "data/application_state.yaml"
@@ -90,32 +89,12 @@ def scavenger(team_name):
     ## Question when in radius
     st.markdown("---")
     if distance is not None and distance <= game.radius:
-
-        base_question_path = Path(GAME_FILE).parent
-        image_file = base_question_path / goal_location.image
-
-        st.header("Question")
-        st.subheader(goal_location.name)
-        st.markdown(goal_location.description)
-        if image_file.exists():
-            st.image(str(image_file), use_column_width=True)
-
-        st.subheader("Answer:")
-        for option in goal_location.options:
-            if st.button(option.option):
-                team_state.solved[goal_location.name] = option.score
-
-                if len(game.locations) - len(team_state.solved) > 0:
-                    next_goal_location_name = determine_next_location(
-                        team_state=team_state,
-                        game=game,
-                        previous_score=option.score,
-                        current_location=current_location,
-                    )
-                    team_state.goal_location_name = next_goal_location_name
-
-                state.update_team(team_name, team_state)
-                st.rerun()
+        handle_question(
+            goal_location=goal_location,
+            team_state=team_state,
+            game=game,
+            state=state,
+        )
     else:
         st.subheader("Question")
         st.write(f"You need to be within {game.radius} meters of the goal location to see the question.")

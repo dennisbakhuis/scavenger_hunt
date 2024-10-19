@@ -2,7 +2,7 @@
 import tempfile
 import yaml
 import pytest
-from models import Game, Location, AnswerOption
+from models import Game, Location, AnswerOption, QuestionType
 
 
 GAME_DATA_FILE = "data/game.yaml"
@@ -23,6 +23,7 @@ def test_game_model_data():
     assert game == other_game
 
     assert other_game._file_path == GAME_DATA_FILE
+    assert other_game.file_path == GAME_DATA_FILE
 
 
 def create_location(
@@ -37,9 +38,10 @@ def create_location(
         name=name,
         latitude=latitude,
         longitude=longitude,
-        description="A test location.",
+        question_type=QuestionType.MultipleChoice,
+        question="A test location.",
+        answer=[AnswerOption(option="Option A", score=10)],
         image="test_image.png",
-        options=[AnswerOption(option="Option A", score=10)],
     )
 
 
@@ -52,17 +54,19 @@ def sample_game_data() -> dict:
                 "name": "Location A",
                 "latitude": 0.0,
                 "longitude": 0.0,
-                "description": "Test Location A",
+                "question_type": "multiple choice",
+                "question": "Test Location A",
                 "image": "image_a.png",
-                "options": [{"option": "Option A", "score": 10}],
+                "answer": [{"option": "Option A", "score": 10}],
             },
             {
                 "name": "Location B",
                 "latitude": 1.0,
                 "longitude": 1.0,
-                "description": "Test Location B",
+                "question_type": "multiple choice",
+                "question": "Test Location B",
                 "image": "image_b.png",
-                "options": [{"option": "Option B", "score": 20}],
+                "answer": [{"option": "Option B", "score": 20}],
             }
         ],
         "radius": 100

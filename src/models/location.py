@@ -2,6 +2,7 @@
 from pydantic import BaseModel
 
 from .answer_option import AnswerOption
+from .question_type import QuestionType
 
 
 class Location(BaseModel):
@@ -27,6 +28,13 @@ class Location(BaseModel):
     name: str
     latitude: float
     longitude: float
-    options: list[AnswerOption]
-    description: str
+    question_type: QuestionType
+    question: str
+    answer: list[AnswerOption]
     image: str
+    dont_know_answer: AnswerOption | None = None
+
+    @property
+    def coordinates(self) -> tuple[float, float]:
+        """Get the coordinates of the location."""
+        return self.latitude, self.longitude

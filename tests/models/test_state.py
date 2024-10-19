@@ -8,7 +8,7 @@ from typing import Generator
 import pytest
 from unittest.mock import MagicMock
 
-from models import State, TeamState, Location, AnswerOption
+from models import State, TeamState, Location, AnswerOption, QuestionType
 
 
 @pytest.fixture
@@ -18,9 +18,10 @@ def game() -> MagicMock:
         name="Test Location",
         latitude=0.0,
         longitude=0.0,
-        description="A test location.",
+        question_type=QuestionType.MultipleChoice,
+        question="A test location.",
+        answer=[AnswerOption(option="Option A", score=10)],
         image="test_image.png",
-        options=[AnswerOption(option="Option A", score=10)],
     )
     game = MagicMock()
     game.locations = [location]

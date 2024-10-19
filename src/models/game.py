@@ -64,3 +64,8 @@ class Game(BaseModel):
                 return location
 
         raise ValueError(f"Location '{location_name}' not found in the game.")
+
+    @property
+    def file_path(self) -> str:
+        """Return the file path of the game data."""
+        return self._file_path

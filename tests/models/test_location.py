@@ -1,6 +1,5 @@
 """Tests for the State model."""
-from models.location import Location
-from models.answer_option import AnswerOption
+from models import Location, AnswerOption, QuestionType
 
 
 def test_location_creation():
@@ -17,14 +16,15 @@ def test_location_creation():
         name="Park",
         latitude=40.7128,
         longitude=-74.0060,
-        options=options,
-        description="A beautiful park",
+        question_type=QuestionType.MultipleChoice,
+        question="A beautiful park",
+        answer=options,
         image="image.png"
     )
     assert location.name == "Park"
     assert location.latitude == 40.7128
     assert location.longitude == -74.0060
-    assert len(location.options) == 2
-    assert location.options[0].option == "Option A"
-    assert location.description == "A beautiful park"
+    assert len(location.answer) == 2
+    assert location.answer[0].option == "Option A"
+    assert location.question == "A beautiful park"
     assert location.image == "image.png"

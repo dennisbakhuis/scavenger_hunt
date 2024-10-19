@@ -1,0 +1,74 @@
+locations:
+  - name: "Ladders"
+    latitude: 52.21197114516794
+    longitude: 6.884310991373106
+    question_type: "multiple choice"
+    question: |
+      Two rope ladders of identical length and weight which are both in free fall, i.e. falling without any external forces acting on them. The first ladder, ladder A, is above a table. The second ladder, ladder B, is above the ground. The spokes of the ladder are regularly inclined at a small angle. The only difference between the ladders is that the spokes angles are mirrored. See the diagram of the ladder below:
+
+      Which of the two ladders will fall faster?
+    answer:
+      - option: "Ladder A falls faster"
+        score: 1
+      - option: "Ladder B falls faster"
+        score: -1
+      - option: "They both fall equally fast"
+        score: -1
+    image: "1_ladders.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Three doors"
+    latitude: 52.21362018414284
+    longitude: 6.876367666122294
+    question_type: "multiple choice"
+    question: |
+      You are a contestant on a game show. There are three doors. Behind one of the doors is a car, behind the others, goats. You pick a door, say number 1, and the host, who knows what's behind the doors, opens another door, say number 3, which has a goat. He then says to you, "Do you still want to pick door number 1, or would you like to switch to door number 2?" 
+
+      What will you do?
+    answer:
+      - option: "Keep your originally chosen door"
+        score: -1
+      - option: "Switch to another door"
+        score: 1
+      - option: "It does not matter what you do"
+        score: -1
+    image: "2_three_doors.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Two kids"
+    latitude: 52.209598123050185
+    longitude: 6.881176148907194
+    question_type: "multiple choice"
+    question: |
+      Mr. and mrs. Smith have two children. The youngest of the two children is a girl. 
+
+      What is the probability that the older child is also a girl?
+    answer:
+      - option: "1/2"
+        score: -1
+      - option: "2/3"
+        score: -1
+      - option: "1/3"
+        score: 1
+    image: "3_two_kids.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Flipping hourglasses"
+    latitude: 52.209598123050185
+    longitude: 6.881176148907194
+    question_type: "open question"
+    question: |
+      You have two hourglasses. One measures 7 minutes and costs 3 coins to flip, and the other measures 4 minutes and costs 1 coin to flip. Your goal is to measure exactly 9 minutes using these two hourglasses. Which of the following methods achieves this at the minimal total cost?
+    answer:
+      - option: "11"
+        score: 1
+      - option: ""
+        score: -1
+    image: "4_flipping_hourglasses.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+radius: 75

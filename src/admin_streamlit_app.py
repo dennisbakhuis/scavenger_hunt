@@ -3,7 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from models import State, Game
+from models import State, Game, Location
 
 
 STATE_FILE = "data/application_state.yaml"
@@ -77,18 +77,21 @@ def scavenger_admin():
             if st.button("Next"):
                 next_item()
 
-        location = game.locations[st.session_state.index]
+        location: Location = game.locations[st.session_state.index]
+        if not isinstance(location, Location):
+            st.write("No more questions available.")
+            return
 
         base_question_path = Path(GAME_FILE).parent
         image_file = base_question_path / location.image
 
         st.subheader(location.name)
-        st.markdown(location.description)
+        st.markdown(location.question)
         if image_file.exists():
             st.image(str(image_file), use_column_width=True)
 
         st.subheader("Answer:")
-        for option in location.options:
+        for option in location.answer:
             st.write(f"Option: {option.option}, Score: {option.score}")
 
     with about_tab:
