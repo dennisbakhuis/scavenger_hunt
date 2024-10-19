@@ -23,6 +23,13 @@ class Game(BaseModel):
 
     _file_path: str = PrivateAttr(init=True)
 
+
+    def __init__(self, file_path: str, **data):
+        """Initialize the game object."""
+        super().__init__(**data)
+        self._file_path = file_path
+
+
     @classmethod
     def from_yaml_file(cls, file_path: str) -> "Game":
         """
@@ -40,8 +47,7 @@ class Game(BaseModel):
         """
         with open(file_path, "r") as file:
             game_data = yaml.safe_load(file)
-            game = cls(**game_data)
-            game._file_path = file_path
+            game = cls(file_path=file_path, **game_data)
 
         return game
 

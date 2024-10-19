@@ -28,3 +28,5 @@ def test_location_creation():
     assert location.answer[0].option == "Option A"
     assert location.question == "A beautiful park"
     assert location.image == "image.png"
+    assert location.question_type == QuestionType.MultipleChoice
+    assert location.coordinates == (40.7128, -74.0060)

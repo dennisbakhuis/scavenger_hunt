@@ -1,11 +1,14 @@
 """Handle the display and answering of the question."""
 from pathlib import Path
 import streamlit as st
-from models import QuestionType, Location, TeamState, Game, State
+from models import QuestionType, Location, TeamState, Game, State, AnswerOption
 from helpers import determine_next_location
 
 
-def display_question(goal_location: Location, base_question_path: Path):
+def display_question(
+    goal_location: Location,
+    base_question_path: Path,
+):
     """
     Display the question header, subheader, and image if available.
 
@@ -25,7 +28,14 @@ def display_question(goal_location: Location, base_question_path: Path):
         st.image(str(image_file), use_column_width=True)
 
 
-def handle_answer_submission(answer: str, options, team_state: TeamState, goal_location: Location, game: Game, state: State):
+def handle_answer_submission(
+    answer: str,
+    options: list[AnswerOption],
+    team_state: TeamState,
+    goal_location: Location,
+    game: Game,
+    state: State,
+):
     """
     Handle answer submission for open questions.
 
@@ -48,14 +58,20 @@ def handle_answer_submission(answer: str, options, team_state: TeamState, goal_l
 
     score = next(
         (option.score for option in options if option.option.lower() == lowered_answer),
-        next(option.score for option in options if option.option == "" or option.option == "wrong")
+        next((option.score for option in options if option.option in ["", "wrong"]), options[0].score)  # Default to the first option's score
     )
     team_state.solved[goal_location.name] = score
 
     update_team_state(team_state, score, goal_location, game, state)
 
 
-def handle_button_click(option, team_state: TeamState, goal_location: Location, game: Game, state: State):
+def handle_button_click(
+    option: AnswerOption,
+    team_state: TeamState,
+    goal_location: Location,
+    game: Game,
+    state: State,
+):
     """
     Handle button click for multiple-choice or 'don't know' answers.
 
@@ -76,7 +92,13 @@ def handle_button_click(option, team_state: TeamState, goal_location: Location, 
     update_team_state(team_state, option.score, goal_location, game, state)
 
 
-def update_team_state(team_state: TeamState, score: int, goal_location: Location, game: Game, state: State):
+def update_team_state(
+    team_state: TeamState,
+    score: int,
+    goal_location: Location,
+    game: Game,
+    state: State,
+):
     """
     Update the team state and determine the next goal location.
 

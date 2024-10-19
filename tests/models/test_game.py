@@ -12,6 +12,7 @@ def test_game_model_data():
     """Test the Game model with the actual game data."""
     with open(GAME_DATA_FILE, "r") as file:
         game_data = yaml.safe_load(file)
+        game_data["file_path"] = file
         game = Game.model_validate(game_data)
 
     assert isinstance(game, Game)
@@ -73,11 +74,17 @@ def sample_game_data() -> dict:
     }
 
 
-def test_game_creation(sample_game_data):
-    """Test the creation of a Game object."""
+@pytest.fixture
+def game(sample_game_data):
+    """Fixture to provide a `Game` object."""
     locations = [create_location(**loc) for loc in sample_game_data["locations"]]
-    game = Game(locations=locations, radius=sample_game_data["radius"])
+    game = Game(locations=locations, radius=sample_game_data["radius"], file_path="game.yaml")
 
+    return game
+
+
+def test_game_creation(game):
+    """Test the creation of a Game object."""
     assert len(game.locations) == 2
     assert game.radius == 100
     assert game.locations[0].name == "Location A"
@@ -97,11 +104,8 @@ def test_game_from_yaml_file(sample_game_data):
     assert game.locations[1].name == "Location B"
 
 
-def test_game_get_location_by_name(sample_game_data):
+def test_game_get_location_by_name(game):
     """Test retrieving a location by name."""
-    locations = [create_location(**loc) for loc in sample_game_data["locations"]]
-    game = Game(locations=locations, radius=sample_game_data["radius"])
-
     location_a = game.get_location_by_name("Location A")
     assert location_a.name == "Location A"
     assert location_a.latitude == 0.0
@@ -111,11 +115,8 @@ def test_game_get_location_by_name(sample_game_data):
     assert location_b.latitude == 1.0
 
 
-def test_game_get_location_by_name_not_found(sample_game_data):
+def test_game_get_location_by_name_not_found(game):
     """Test retrieving a location that doesn't exist raises a ValueError."""
-    locations = [create_location(**loc) for loc in sample_game_data["locations"]]
-    game = Game(locations=locations, radius=sample_game_data["radius"])
-
     with pytest.raises(ValueError, match="Location 'Location C' not found in the game."):
         game.get_location_by_name("Location C")
 
