@@ -65,9 +65,49 @@ locations:
     answer:
       - option: "11"
         score: 1
-      - option: ""
+      - option: "wrong"
         score: -1
     image: "4_flipping_hourglasses.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "A wolf, a goat, and a cabbage"
+    latitude: 52.209598123050185
+    longitude: 6.881176148907194
+    question_type: "open question"
+    question: |
+      A farmer needs to get a wolf, a goat, and a cabbage across a river using a boat that can only carry the farmer and one item at a time. If left unattended together, the wolf will eat the goat, and the goat will eat the cabbage.    
+      
+      What is the minimum number of crossings the farmer must make to get all three items safely across the river?
+    answer:
+      - option: "7"
+        score: 1
+      - option: "wrong"
+        score: -1
+    image: "5_wolf_goat_cabbage.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Three switches, three bulbs"
+    latitude: 52.209598123050185
+    longitude: 6.881176148907194
+    question_type: "multiple choice"
+    question: |
+      You are in a room with 3 light switches, each connected to a different bulb in another room. You cannot see the bulbs from where you are. You can turn the switches on or off in any combination. After that, you may enter the room with the bulbs only once. Using your observations, you aim to determine which switch controls which bulb.      
+      
+      What is the maximum number of bulbs for which you can uniquely determine the switch-to-bulb assignments using this method?
+    answer:
+      - option: "0"
+        score: -1
+      - option: "1"
+        score: -1
+      - option: "2"
+        score: -1
+      - option: "3"
+        score: 1
+      - option: "These are probably HUE bulbs, check the app"
+        score: -1
+    image: "6_three_switches_three_bulbs.jpg"
     dont_know_answer:
       option: "I have no idea"
       score: 0
