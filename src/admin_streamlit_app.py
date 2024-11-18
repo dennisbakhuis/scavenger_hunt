@@ -4,10 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 from models import State, Game, Location
-
-
-STATE_FILE = "data/application_state.yaml"
-GAME_FILE = "data/game.yaml"
+from constants import STATE_FILE, GAME_FILE, LOCATION_LOG_FILE
 
 
 # Get game files

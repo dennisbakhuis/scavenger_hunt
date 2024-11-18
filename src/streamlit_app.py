@@ -8,11 +8,7 @@ import streamlit as st
 
 from models import State, Game
 from helpers import calculate_bearing, log_ndjson, handle_question
-
-
-STATE_FILE = "data/application_state.yaml"
-GAME_FILE = "data/game.yaml"
-LOCATION_LOG_FILE = "data/location_log.ndjson"
+from constants import STATE_FILE, GAME_FILE, LOCATION_LOG_FILE
 
 
 # Get game files

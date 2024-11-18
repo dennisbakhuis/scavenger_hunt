@@ -1,7 +1,8 @@
 locations:
   - name: "Ladders"
-    latitude: 52.21197114516794
-    longitude: 6.884310991373106
+    # 1. Peter-Altmeier Denkmal: 50.362993404764104, 7.6015048180594915
+    latitude: 50.362993404764104
+    longitude:  7.6015048180594915
     question_type: "multiple choice"
     question: |
       Two rope ladders of identical length and weight which are both in free fall, i.e. falling without any external forces acting on them. The first ladder, ladder A, is above a table. The second ladder, ladder B, is above the ground. The spokes of the ladder are regularly inclined at a small angle. The only difference between the ladders is that the spokes angles are mirrored. See the diagram of the ladder below:
@@ -19,8 +20,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "Three doors"
-    latitude: 52.21362018414284
-    longitude: 6.876367666122294
+    # 2. Schlossstufen end: 50.355785307450454, 7.603953856477178
+    latitude: 50.355785307450454
+    longitude: 7.603953856477178
     question_type: "multiple choice"
     question: |
       You are a contestant on a game show. There are three doors. Behind one of the doors is a car, behind the others, goats. You pick a door, say number 1, and the host, who knows what's behind the doors, opens another door, say number 3, which has a goat. He then says to you, "Do you still want to pick door number 1, or would you like to switch to door number 2?" 
@@ -38,8 +40,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "Two kids"
-    latitude: 52.209598123050185
-    longitude: 6.881176148907194
+    # 3. Konrad-Adenauer Ufer: 50.358166689704554, 7.604683879206725
+    latitude: 50.358166689704554
+    longitude: 7.604683879206725
     question_type: "multiple choice"
     question: |
       Mr. and mrs. Smith have two children. The youngest of the two children is a girl. 
@@ -57,8 +60,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "Flipping hourglasses"
-    latitude: 52.209598123050185
-    longitude: 6.881176148907194
+    # 4. Kaiser-Wilhem denkmal: 50.36502717725698, 7.606513150226778
+    latitude: 50.36502717725698
+    longitude: 7.606513150226778
     question_type: "open question"
     question: |
       You have two hourglasses. One measures 7 minutes and costs 3 coins to flip, and the other measures 4 minutes and costs 1 coin to flip. Your goal is to measure exactly 9 minutes using these two hourglasses. Which of the following methods achieves this at the minimal total cost?
@@ -72,8 +76,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "A wolf, a goat, and a cabbage"
-    latitude: 52.209598123050185
-    longitude: 6.881176148907194
+    # 5. Stadtmauer: 50.36320868825047, 7.604595520183715
+    latitude: 50.36320868825047
+    longitude: 7.604595520183715
     question_type: "open question"
     question: |
       A farmer needs to get a wolf, a goat, and a cabbage across a river using a boat that can only carry the farmer and one item at a time. If left unattended together, the wolf will eat the goat, and the goat will eat the cabbage.    
@@ -89,8 +94,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "Three switches, three bulbs"
-    latitude: 52.209598123050185
-    longitude: 6.881176148907194
+    # 6. Basilika Sankt Kastor: 50.36217626641079, 7.604774011633124
+    latitude: 50.36217626641079
+    longitude: 7.604774011633124
     question_type: "multiple choice"
     question: |
       You are in a room with 3 light switches, each connected to a different bulb in another room. You cannot see the bulbs from where you are. You can turn the switches on or off in any combination. After that, you may enter the room with the bulbs only once. Using your observations, you aim to determine which switch controls which bulb.      
@@ -111,4 +117,113 @@ locations:
     dont_know_answer:
       option: "I have no idea"
       score: 0
-radius: 75
+  - name: "Weighing Coins"
+    # 7. Görresplatz: 50.35992338937352, 7.600863034946477
+    latitude: 50.35992338937352
+    longitude: 7.600863034946477
+    question_type: "multiple choice"
+    question: |
+      You have 9 coins, and one of them is heavier than the others. You can use a balance scale.
+
+      What is the **minimum number of weighings** needed to guarantee identifying the heavier coin?
+    answer:
+      - option: "1"
+        score: -1
+      - option: "2"
+        score: 1
+      - option: "3"
+        score: -1
+      - option: "4"
+        score: -1
+      - option: "5"
+        score: -1
+    image: "7_weighing_coins.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Bridge Crossing"
+    # 8. Konrad-Adenauer ufer 2: 50.36072226672526, 7.605156988319769
+    latitude: 50.36072226672526
+    longitude: 7.605156988319769
+    question_type: "multiple choice"
+    question: |
+      Four people need to cross a dangerous bridge at night. They have only **one torch**, which is necessary to see the way across and must be carried every time someone crosses. The bridge can hold at most two people at once, and they cannot cross without the torch. The torch cannot be thrown or left unattended.
+
+      Each person walks at a different speed:
+      
+      - Person A: 1 minute to cross
+      - Person B: 2 minutes to cross
+      - Person C: 5 minutes to cross
+      - Person D: 8 minutes to cross
+
+      When two people cross together, they must move at the slower person's pace.
+
+      What is the **minimum total time** required for all four people to safely cross the bridge?
+    answer:
+      - option: "11 minutes"
+        score: -1
+      - option: "13 minutes"
+        score: -1
+      - option: "15 minutes"
+        score: 1
+      - option: "17 minutes"
+        score: -1
+      - option: "19 minutes"
+        score: -1
+    image: "8_bridge_crossing.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Happy birthday to you too"
+    # 9. Schloss Koblenz front: 50.356032257255556, 7.59957494169306
+    latitude: 50.356032257255556
+    longitude: 7.59957494169306
+    question_type: "multiple choice"
+    question: |
+      In a room with 40 people, what is the approximate probability that at least two people share the same birthday? (Assuming each day of the year is equally likely and ignoring leap years.)
+    answer:
+      - option: "Less than 10%"
+        score: -1
+      - option: "About 25%"
+        score: -1
+      - option: "About 50%"
+        score: -1
+      - option: "About 75%"
+        score: -1
+      - option: "Over 90%"
+        score: 1
+      - option: "100%"
+        score: -1
+      - option: "0%"
+        score: -1
+    image: "9_birthday_paradox.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Thief and a knapsack"
+    # 10. Denkmal opfer nazionalsozialismus: 50.35765526927839, 7.602002761247321
+    latitude: 50.35765526927839
+    longitude: 7.602002761247321
+    question_type: "open question"
+    question: |
+      You have a knapsack that can carry a maximum weight of 15 kg. You have the following nerdy items available to steal, with their respective weights and values:
+
+      | Item                           | Weight (kg) | Value (€) |
+      |--------------------------------|-------------|-----------|
+      | Gaming Laptop                  | 4           | 300       |
+      | Rare Comic Book                | 1           | 200       |
+      | Collector's Edition Board Game | 6           | 250       |
+      | Limited Edition Console        | 7           | 400       |
+      | Virtual Reality Headset        | 2           | 150       |
+
+      You can't exceed 15 kg in total weight. **What is the maximum total value** you can stash in your knapsack?
+    answer:
+      - option: "1050"
+        score: 1
+      - option: "Any other value"
+        score: -1
+    image: "10_thief_knapsack.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+radius: 25
