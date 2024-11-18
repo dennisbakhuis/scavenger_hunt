@@ -8,7 +8,7 @@ import streamlit as st
 
 from models import State, Game
 from helpers import calculate_bearing, log_ndjson, handle_question
-from constants import STATE_FILE, GAME_FILE, LOCATION_LOG_FILE
+from constants import STATE_FILE, GAME_FILE, LOGGING_FILE
 
 
 # Get game files
@@ -53,7 +53,7 @@ def scavenger(team_name):
     if location is not None and location.get("latitude") is not None:
         # Log location
         log_ndjson(
-            file_path=LOCATION_LOG_FILE,
+            file_path=LOGGING_FILE,
             team_name=team_name,
             timestamp=time.strftime("%Y-%m-%d %H:%M:%S"),
             latitude=location.get("latitude"),
@@ -101,7 +101,7 @@ def scavenger(team_name):
 ##############
 def login_page():
     """Login page for the scavenger hunt."""
-    st.title("Team Login")
+    st.title("Team login")
 
     team_name = st.text_input("Enter your team name (only letters allowed):")
 

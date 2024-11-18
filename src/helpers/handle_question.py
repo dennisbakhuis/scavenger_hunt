@@ -25,7 +25,7 @@ def display_question(
 
     image_file = base_question_path / goal_location.image
     if image_file.exists():
-        st.image(str(image_file), use_column_width=True)
+        st.image(str(image_file), use_container_width=True)
 
 
 def handle_answer_submission(

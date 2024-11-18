@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 from models import State, Game, Location
-from constants import STATE_FILE, GAME_FILE, LOCATION_LOG_FILE
+from constants import STATE_FILE, GAME_FILE, LOGGING_FILE
 
 
 # Get game files
@@ -27,6 +27,7 @@ def scavenger_admin():
     with overview_tab:
         st.header("Overview")
         st.write(f"Number of registered teams: {state.n_active_teams}")
+        print(state.teams)
 
         st.subheader("Puzzle statistics")
         puzzle_statistics = []
@@ -85,7 +86,7 @@ def scavenger_admin():
         st.subheader(location.name)
         st.markdown(location.question)
         if image_file.exists():
-            st.image(str(image_file), use_column_width=True)
+            st.image(str(image_file), use_container_width=True)
 
         st.subheader("Answer:")
         for option in location.answer:

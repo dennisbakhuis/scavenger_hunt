@@ -1,6 +1,7 @@
 """Game state model."""
 from pathlib import Path
-from random import choice
+from random import choice, uniform
+import time
 
 from pydantic import BaseModel, PrivateAttr
 import yaml
@@ -127,21 +128,37 @@ class State(BaseModel):
 
         return state
 
-    def save(self) -> None:
+
+    def save(self, retries: int = 3, min_wait: float = 0.5, max_wait: float = 2.0) -> None:
         """
-        Save the game state to a YAML file.
+        Save the game state to a YAML file with a retry mechanism.
 
         Parameters
         ----------
-        file_path : str
-            The path to the YAML file.
+        retries : int
+            Number of retry attempts in case of failure. Default is 3.
+        min_wait : float
+            Minimum wait time (in seconds) between retries. Default is 0.5 seconds.
+        max_wait : float
+            Maximum wait time (in seconds) between retries. Default is 2.0 seconds.
         """
-        with open(self._file_path, "w") as file:
-            yaml.dump(
-                data=self.model_dump(),
-                stream=file,
-                default_flow_style=False,
-            )
+        for attempt in range(retries):
+            try:
+                with open(self._file_path, "w") as file:
+                    yaml.dump(
+                        data=self.model_dump(),
+                        stream=file,
+                        default_flow_style=False,
+                    )
+                return
+            except (IOError, yaml.YAMLError) as e:
+                print(f"Attempt {attempt + 1} failed: {e}")
+                if attempt < retries - 1:  # Wait and retry
+                    wait_time = uniform(min_wait, max_wait)
+                    print(f"Retrying in {wait_time:.2f} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    print("Failed to save the game state after multiple attempts.")
 
     def get_or_create_team(self, team_name: str) -> TeamState:
         """
