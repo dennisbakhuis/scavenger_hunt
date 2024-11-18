@@ -226,4 +226,76 @@ locations:
     dont_know_answer:
       option: "I have no idea"
       score: 0
+  - name: "Two father and two sons"
+    # 11. Am alten hospital: 50.361826544189796, 7.602262740468736
+    latitude: 50.361826544189796
+    longitude: 7.602262740468736
+    question_type: "open question"
+    question: |
+      Two fathers and two sons sat down to eat eggs for breakfast from a bowl containing **seven eggs**. They all eat an equal number of eggs.
+
+      What is the **minimum number of eggs left** in the bowl after they have eaten?
+    answer:
+      - option: "1"
+        score: 1
+      - option: "Any other number"
+        score: -1
+    image: "two_fathers_two_sons.jpg"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Chessboard and Dominoes"
+    # 12. Schloss Koblenz back: 50.354889379924884, 7.602840040907437
+    latitude: 50.354889379924884
+    longitude: 7.602840040907437
+    question_type: "multiple choice"
+    question: |
+      You have a standard 8×8 chessboard, but two **opposite corners have been removed**, leaving you with 62 squares. You have an unlimited supply of standard 2×1 dominoes.
+
+      Is it possible to cover the entire modified chessboard with these dominoes without any overlaps or gaps?
+    answer:
+      - option: "No, it's impossible to cover the modified chessboard completely with dominoes."
+        score: 1
+      - option: "Yes, it's possible to cover the modified chessboard completely with dominoes."
+        score: -1
+    image: "12_chessboard_dominos.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
+  - name: "Testing assumptions"
+    # Placeholder location: 0.0, 0.0
+    latitude: 0.0
+    longitude: 0.0
+    question_type: "multiple choice"
+    question: |
+      You are presented with four cards on a table. Each card has a letter on one side and a number on the other side. The visible faces of the cards show:
+
+      - **[A]**
+      - **[D]**
+      - **[4]**
+      - **[7]**
+
+      We want to test the following rule:
+      **"If a card has a vowel on one side, then it has an even number on the other side."**
+
+      Which card(s) must you turn over to determine whether the rule holds true for these cards?
+    answer:
+      - option: "A and 7"
+        score: 1
+      - option: "A and 4"
+        score: -1
+      - option: "A only"
+        score: -1
+      - option: "A, D, 4, and 7"
+        score: -1
+      - option: "D and 7"
+        score: -1
+      - option: "4 and 7"
+        score: -1
+      - option: "D and 4"
+        score: -1
+    image: "13_wason_selection_task.png"
+    dont_know_answer:
+      option: "I have no idea"
+      score: 0
 radius: 25
