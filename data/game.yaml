@@ -240,7 +240,7 @@ locations:
         score: 1
       - option: "Any other number"
         score: -1
-    image: "two_fathers_two_sons.jpg"
+    image: "11_two_fathers_two_sons.jpg"
     dont_know_answer:
       option: "I have no idea"
       score: 0
@@ -294,7 +294,7 @@ locations:
         score: -1
       - option: "D and 4"
         score: -1
-    image: "13_wason_selection_task.png"
+    image: "13_watson_selection_task.jpg"
     dont_know_answer:
       option: "I have no idea"
       score: 0
