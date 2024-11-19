@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 
 from models import State, Game, Location
-from constants import STATE_FILE, GAME_FILE, LOGGING_FILE
+from constants import STATE_FILE, GAME_FILE
 
 
 # Get game files

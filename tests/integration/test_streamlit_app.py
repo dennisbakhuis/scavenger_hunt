@@ -1,7 +1,6 @@
 """Integration test for the Streamlit app."""
 import tempfile
 from pathlib import Path
-import time
 
 import pytest
 from streamlit.testing.v1 import AppTest
@@ -109,7 +108,7 @@ def test_streamlit_normal_run(monkeypatch, game):
     monkeypatch.setattr("streamlit_geolocation.streamlit_geolocation", get_coordinates)
 
     # Iterate through stations
-    for ix in range(len(game.locations)):
+    for _ in range(len(game.locations)):
 
         state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
         goal_name = state.teams["Team"].goal_location_name
@@ -118,7 +117,6 @@ def test_streamlit_normal_run(monkeypatch, game):
         print(f"Goal: {goal_name}")
         latitude, longitude = goal.latitude, goal.longitude
 
-        # if ix == 0:
         at.run()
 
         # Check if question is showing
