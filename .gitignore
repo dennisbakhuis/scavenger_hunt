@@ -38,6 +38,8 @@ coverage.xml
 # pyenv
 .python-version
 
+.=pytest_cache/
+
 # Editor backups and settings
 *.swp
 *.swo
