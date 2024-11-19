@@ -263,9 +263,9 @@ locations:
       option: "I have no idea"
       score: 0
   - name: "Testing assumptions"
-    # Placeholder location: 0.0, 0.0
-    latitude: 0.0
-    longitude: 0.0
+    # 13. Peter-Altmeier denkmal: 50.36299947727172, 7.601502241638697
+    latitude: 50.36299947727172
+    longitude: 7.601502241638697
     question_type: "multiple choice"
     question: |
       You are presented with four cards on a table. Each card has a letter on one side and a number on the other side. The visible faces of the cards show:

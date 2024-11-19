@@ -19,7 +19,7 @@ state = State.from_yaml_file(file_path=STATE_FILE, game=game)
 #############
 # Scavenger #
 #############
-def scavenger(team_name):
+def scavenger(team_name: str) -> None:
     """Application for the scavenger hunt."""
     team_state = state.get_or_create_team(
         team_name=team_name,
@@ -81,7 +81,6 @@ def scavenger(team_name):
             st.write(f": {round(distance)} meters")
             st.write(f": {round(bearing)} degrees")
 
-
     ## Question when in radius
     st.markdown("---")
     if distance is not None and distance <= game.radius:
@@ -95,21 +94,23 @@ def scavenger(team_name):
         st.subheader("Question")
         st.write(f"You need to be within {game.radius} meters of the goal location to see the question.")
 
-
-##############
-# Login page #
-##############
-def login_page():
+def login_page() -> None:
     """Login page for the scavenger hunt."""
     st.title("Team login")
 
-    team_name = st.text_input("Enter your team name (only letters allowed):")
+    def update_team_name(team_name: str) -> None:
+        """Update team name in session state."""
+        if team_name and re.match("^[A-Za-z]+$", team_name):
+            st.session_state.team_name = team_name
+        else:
+            st.error("Team name can only contain uppercase and lowercase letters. No numbers, spaces, or special characters.")
 
-    if team_name and not re.match("^[A-Za-z]+$", team_name):
-        st.error("Team name can only contain uppercase and lowercase letters. No numbers, spaces, or special characters.")
-    elif st.button("Access Team Page") and team_name:
-        st.session_state.team_name = team_name
-        st.rerun()
+    with st.form("login_form", clear_on_submit=False):
+        team_name = st.text_input("Enter your team name (only letters allowed):")
+        st.form_submit_button(
+            label="Access Team Page",
+            on_click=lambda: update_team_name(team_name),
+        )
 
 
 ########

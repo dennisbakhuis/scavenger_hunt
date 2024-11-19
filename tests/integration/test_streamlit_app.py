@@ -51,6 +51,7 @@ def test_streamlit_fill_team_name_wrong_characters():
 
     # Fill in team name with spaces
     for wrong_name in [
+        "",
         " ",
         "Team 1",
         "Team$",
@@ -58,6 +59,7 @@ def test_streamlit_fill_team_name_wrong_characters():
         "#",
     ]:
         at.text_input[0].input(wrong_name).run()
+        at.button[0].click().run()
         assert at.error[0].value.startswith("Team name can only contain uppercase and lowercase letters.")
 
 
@@ -84,6 +86,8 @@ def test_streamlit_valid_team_name(game):
 
 def test_streamlit_normal_run(monkeypatch, game):
     """Test for a single user to go through all the stations."""
+    # monkeypatch.setenv("STREAMLIT_RUNNER_FASTRERUNS", False)  # Disable fastreruns
+
     at = AppTest.from_file(STREAMLIT_APP_FILE)
     at.session_state["team_name"] = "Team"
     at.run()
@@ -127,6 +131,6 @@ def test_streamlit_normal_run(monkeypatch, game):
             at.text_input[0].input("Answer").run()  # Fill in the answer
             at.button[0].click().run()  # Submit the answer
 
-        # time.sleep(0.5)
+        # time.sleep(5)
 
         break

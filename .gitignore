@@ -51,5 +51,4 @@ coverage.xml
 .DS_Store
 
 # Application
-data/application_state.yaml
-data/location_log_ndjson
+state/
