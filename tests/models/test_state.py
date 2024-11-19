@@ -4,9 +4,9 @@ import os
 import yaml
 from pathlib import Path
 from typing import Generator
+from unittest.mock import MagicMock, patch, mock_open
 
 import pytest
-from unittest.mock import MagicMock
 
 from models import State, TeamState, Location, AnswerOption, QuestionType
 
@@ -106,6 +106,41 @@ def test_save_state(state_file, game):
     with open(state_file, "r") as file:
         loaded_data = yaml.safe_load(file)
         assert "Team1" in loaded_data["teams"]
+
+
+def test_save_state_with_retries(state_file, game):
+    """Test the `save` method to ensure the state is correctly saved to a YAML file with retries."""
+    state = State(file_path=state_file, game=game)
+    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
+
+    # Mock the open and time.sleep calls to simulate retry behavior
+    with (
+        patch("builtins.open", mock_open()) as mocked_file,
+        patch("time.sleep") as mocked_sleep,
+        patch("yaml.dump") as mocked_yaml_dump,
+    ):
+        state.save()
+
+        # Verify that the file was opened in write mode
+        mocked_file.assert_called_with(state_file, "w")
+
+        # Verify the content written to the file
+        handle = mocked_file()
+        mocked_yaml_dump.assert_called_once_with(
+            data=state.model_dump(),
+            stream=handle,
+            default_flow_style=False,
+        )
+
+        # Verify time.sleep is not called (indicating no retries occurred)
+        mocked_sleep.assert_not_called()
+
+    # Simulate failure and retries
+    with patch("builtins.open", side_effect=IOError("Mocked IOError")) as mocked_file, patch("time.sleep") as mocked_sleep:
+        state.save()
+
+        assert mocked_sleep.call_count == 2
+        assert mocked_file.call_count == 3
 
 
 def test_update_team(state_file, game):

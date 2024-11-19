@@ -18,6 +18,8 @@ class State(BaseModel):
     ----------
     team_states : dict[str, TeamState], optional
         A dictionary where keys are team names and values are their respective `TeamState` objects. Defaults to an empty dictionary.
+    button_beam_to_location_visible : bool, optional (default=False)
+        Adds a button to beam to goal location. Defaults to False.
 
     Properties
     ----------
@@ -26,6 +28,8 @@ class State(BaseModel):
     """
 
     teams: dict[str, TeamState] = {}
+
+    button_beam_to_location_visible: bool = False
 
     _file_path: str = PrivateAttr(init=True)
     _game: Game = PrivateAttr(init=True)

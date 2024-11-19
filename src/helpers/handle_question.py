@@ -124,7 +124,7 @@ def update_team_state(
         )
         team_state.goal_location_name = next_goal_location_name
 
-        state.update_team(team_state.name, team_state)
+    state.update_team(team_state.name, team_state)
 
 
 def handle_question(goal_location: Location, team_state: TeamState, game: Game, state: State):

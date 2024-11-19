@@ -205,7 +205,7 @@ def test_update_team_state_all_solved(mock_team_state, mock_goal_location, mock_
     """
     mock_team_state.solved = {"Park": 10, "Hotel": 10}
     update_team_state(mock_team_state, 10, mock_goal_location, mock_game, mock_state)
-    mock_state.update_team.assert_not_called()
+    mock_state.update_team.assert_called_once_with(mock_team_state.name, mock_team_state)
     assert mock_team_state.goal_location_name == "Park"
 
 

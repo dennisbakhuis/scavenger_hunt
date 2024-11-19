@@ -41,6 +41,16 @@ def scavenger(team_name: str) -> None:
         st.write(f": {len(team_state.solved)} / {len(game.locations)}")
         location = streamlit_geolocation()
 
+    ## Current goal location
+    goal_location = game.get_location_by_name(team_state.goal_location_name)
+
+    # If beam to location is enabled show button
+    if state.button_beam_to_location_visible and st.checkbox(label="Beam me to goal location"):
+        location = {
+            "latitude": goal_location.latitude,
+            "longitude": goal_location.longitude,
+        }
+
     distance = None
 
     ## Check if all locations are solved
@@ -65,7 +75,6 @@ def scavenger(team_name: str) -> None:
         st.subheader("Location and direction")
 
         current_location = (location.get("latitude"), location.get("longitude"))
-        goal_location = game.get_location_by_name(team_state.goal_location_name)
         goal_coordinates = (goal_location.latitude, goal_location.longitude)
 
         distance = geodesic(current_location, goal_coordinates).meters
@@ -105,12 +114,13 @@ def login_page() -> None:
         else:
             st.error("Team name can only contain uppercase and lowercase letters. No numbers, spaces, or special characters.")
 
-    with st.form("login_form", clear_on_submit=False):
-        team_name = st.text_input("Enter your team name (only letters allowed):")
-        st.form_submit_button(
-            label="Access Team Page",
-            on_click=lambda: update_team_name(team_name),
-        )
+    team_name = st.text_input(
+        label="Enter your team name (only letters allowed):",
+    )
+    st.button(
+        label="Access Team Page",
+        on_click=lambda: update_team_name(team_name),
+    )
 
 
 ########

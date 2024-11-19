@@ -12,7 +12,7 @@ import constants
 STREAMLIT_APP_FILE = "src/streamlit_app.py"
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(autouse=True)
 def temporary_state_folder():
     """Create temporary state folder for the state file."""
     previous_state_file = constants.STATE_FILE
@@ -83,6 +83,32 @@ def test_streamlit_valid_team_name(game):
     assert state.teams["Team"].name == "Team"
 
 
+def test_streamlit_button_beam_to_location(game):
+    """Test the beam to location button."""
+    at = AppTest.from_file(STREAMLIT_APP_FILE)
+    at.session_state["team_name"] = "Team"
+    at.run()
+
+    # By default, the button should not be visible
+    assert len(at.checkbox) == 0
+
+    # Set option for button visibility to True
+    state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
+    state.button_beam_to_location_visible = True
+    state.save()
+    at.run()
+
+    assert at.checkbox[0].label == "Beam me to goal location"
+    assert not at.checkbox[0].value
+    assert at.markdown[-1].value.startswith("You need to be within")
+
+    # Turn checkbox on and check if beamed to location
+    at.checkbox[0].check().run()
+    goal_name = state.teams["Team"].goal_location_name
+
+    assert at.subheader[-2].value == goal_name
+
+
 def test_streamlit_normal_run(monkeypatch, game):
     """Test for a single user to go through all the stations."""
     at = AppTest.from_file(STREAMLIT_APP_FILE)
@@ -106,13 +132,13 @@ def test_streamlit_normal_run(monkeypatch, game):
     monkeypatch.setattr("streamlit_geolocation.streamlit_geolocation", get_coordinates)
 
     # Iterate through stations
-    for _ in range(len(game.locations)):
+    for ix in range(len(game.locations)):
 
         state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
         goal_name = state.teams["Team"].goal_location_name
         goal = game.get_location_by_name(goal_name)
 
-        print(f"Goal: {goal_name}")
+        print(f"Goal {ix+1:<2}: {goal_name}")
         latitude, longitude = goal.latitude, goal.longitude
 
         at.run()
@@ -127,6 +153,5 @@ def test_streamlit_normal_run(monkeypatch, game):
             at.text_input[0].input("Answer").run()  # Fill in the answer
             at.button[0].click().run()  # Submit the answer
 
-        # time.sleep(5)
-
-        break
+    # Check if all locations are solved
+    assert at.success[0].value == "Congratulations! You have found all the locations and answered all the questions. You are a true scavenger hunt master!"
