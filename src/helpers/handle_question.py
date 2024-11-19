@@ -125,7 +125,6 @@ def update_team_state(
         team_state.goal_location_name = next_goal_location_name
 
         state.update_team(team_state.name, team_state)
-        st.rerun()
 
 
 def handle_question(goal_location: Location, team_state: TeamState, game: Game, state: State):
@@ -150,14 +149,38 @@ def handle_question(goal_location: Location, team_state: TeamState, game: Game, 
 
     if goal_location.question_type == QuestionType.MultipleChoice:
         for option in goal_location.answer:
-            if st.button(option.option):
-                handle_button_click(option, team_state, goal_location, game, state)
-
+            st.button(
+                label=option.option,
+                on_click=lambda option=option: handle_button_click(
+                    option=option,
+                    team_state=team_state,
+                    goal_location=goal_location,
+                    game=game,
+                    state=state,
+                ),
+            )
     elif goal_location.question_type == QuestionType.OpenQuestion:
         answer = st.text_input("Answer:")
-        if st.button("Submit"):
-            handle_answer_submission(answer, goal_location.answer, team_state, goal_location, game, state)
+        st.button(
+            label="Submit",
+            on_click=lambda: handle_answer_submission(
+                answer=answer,
+                options=goal_location.answer,
+                team_state=team_state,
+                goal_location=goal_location,
+                game=game,
+                state=state,
+            ),
+        )
 
     if goal_location.dont_know_answer:
-        if st.button(goal_location.dont_know_answer.option):
-            handle_button_click(goal_location.dont_know_answer, team_state, goal_location, game, state)
+        st.button(
+            label=goal_location.dont_know_answer.option,
+            on_click=lambda: handle_button_click(
+                option=goal_location.dont_know_answer,
+                team_state=team_state,
+                goal_location=goal_location,
+                game=game,
+                state=state,
+            ),
+        )

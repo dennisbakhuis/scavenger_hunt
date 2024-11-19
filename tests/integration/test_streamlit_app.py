@@ -85,8 +85,6 @@ def test_streamlit_valid_team_name(game):
 
 def test_streamlit_normal_run(monkeypatch, game):
     """Test for a single user to go through all the stations."""
-    # monkeypatch.setenv("STREAMLIT_RUNNER_FASTRERUNS", False)  # Disable fastreruns
-
     at = AppTest.from_file(STREAMLIT_APP_FILE)
     at.session_state["team_name"] = "Team"
     at.run()
