@@ -10,7 +10,7 @@ locations:
       Which of the two ladders will fall faster?
     answer:
       - option: "Ladder A falls faster"
-        score: 1
+        score: 2
       - option: "Ladder B falls faster"
         score: -1
       - option: "They both fall equally fast"
@@ -32,7 +32,7 @@ locations:
       - option: "Keep your originally chosen door"
         score: -1
       - option: "Switch to another door"
-        score: 1
+        score: 2
       - option: "It does not matter what you do"
         score: -1
     image: "2_three_doors.png"
@@ -54,7 +54,7 @@ locations:
       - option: "2/3"
         score: -1
       - option: "1/3"
-        score: 1
+        score: 2
     image: "3_two_kids.png"
     dont_know_answer:
       option: "I have no idea"
@@ -68,7 +68,7 @@ locations:
       You have two hourglasses. One measures 7 minutes and costs 3 coins to flip, and the other measures 4 minutes and costs 1 coin to flip. Your goal is to measure exactly 9 minutes using these two hourglasses. Which of the following methods achieves this at the minimal total cost?
     answer:
       - option: "11"
-        score: 1
+        score: 2
       - option: "wrong"
         score: -1
     image: "4_flipping_hourglasses.jpg"
@@ -86,7 +86,7 @@ locations:
       What is the minimum number of crossings the farmer must make to get all three items safely across the river?
     answer:
       - option: "7"
-        score: 1
+        score: 2
       - option: "wrong"
         score: -1
     image: "5_wolf_goat_cabbage.png"
@@ -110,7 +110,7 @@ locations:
       - option: "2"
         score: -1
       - option: "3"
-        score: 1
+        score: 2
       - option: "These are probably HUE bulbs, check the app"
         score: -1
     image: "6_three_switches_three_bulbs.jpg"
@@ -130,7 +130,7 @@ locations:
       - option: "1"
         score: -1
       - option: "2"
-        score: 1
+        score: 2
       - option: "3"
         score: -1
       - option: "4"
@@ -165,7 +165,7 @@ locations:
       - option: "13 minutes"
         score: -1
       - option: "15 minutes"
-        score: 1
+        score: 2
       - option: "17 minutes"
         score: -1
       - option: "19 minutes"
@@ -191,7 +191,7 @@ locations:
       - option: "About 75%"
         score: -1
       - option: "Over 90%"
-        score: 1
+        score: 2
       - option: "100%"
         score: -1
       - option: "0%"
@@ -219,7 +219,7 @@ locations:
       You can't exceed 15 kg in total weight. **What is the maximum total value** you can stash in your knapsack?
     answer:
       - option: "1050"
-        score: 1
+        score: 2
       - option: "Any other value"
         score: -1
     image: "10_thief_knapsack.jpg"
@@ -237,7 +237,7 @@ locations:
       What is the **minimum number of eggs left** in the bowl after they have eaten?
     answer:
       - option: "1"
-        score: 1
+        score: 2
       - option: "Any other number"
         score: -1
     image: "11_two_fathers_two_sons.jpg"
@@ -255,7 +255,7 @@ locations:
       Is it possible to cover the entire modified chessboard with these dominoes without any overlaps or gaps?
     answer:
       - option: "No, it's impossible to cover the modified chessboard completely with dominoes."
-        score: 1
+        score: 2
       - option: "Yes, it's possible to cover the modified chessboard completely with dominoes."
         score: -1
     image: "12_chessboard_dominos.png"
@@ -281,7 +281,7 @@ locations:
       Which card(s) must you turn over to determine whether the rule holds true for these cards?
     answer:
       - option: "A and 7"
-        score: 1
+        score: 2
       - option: "A and 4"
         score: -1
       - option: "A only"
