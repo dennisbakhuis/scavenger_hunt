@@ -30,7 +30,7 @@ def scavenger(team_name: str) -> None:
     with title_column_1:
         st.title("Scavenger hunt 🕵")
     with title_column_2:
-        if st.button(label="Reload"):
+        if st.button(label="Reload"):  # pragma: no cover
             st.rerun()
 
     ## Top section

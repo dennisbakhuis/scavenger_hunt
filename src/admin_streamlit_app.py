@@ -29,7 +29,7 @@ def scavenger_admin():
     with title_column_1:
         st.title("Scavenger hunt admin 🕵")
     with title_column_2:
-        if st.button(label="Reload"):
+        if st.button(label="Reload"):  # pragma: no cover
             st.rerun()
 
     overview_tab, questions_tab, stats_tab = st.tabs(["Overview", "Questions", "Statistics"])
@@ -106,10 +106,6 @@ def scavenger_admin():
 
     with questions_tab:
         location: Location = game.locations[st.session_state.index]
-        if not isinstance(location, Location):
-            st.write("No more questions available.")
-            return
-
         col1, col2, col3 = st.columns([4, 1, 1])
 
         with col1:
@@ -222,7 +218,7 @@ def scavenger_admin():
             "points_clicked": no_beam_logs[no_beam_logs["team_name"] == group.name].shape[0],
             "distance_traveled": no_beam_logs[no_beam_logs["team_name"] == group.name]["distance"].sum(),
             "distance_beamed": beam_logs[beam_logs["team_name"] == group.name]["distance"].sum(),
-            "total_score": scores[group.name],
+            "total_score": scores[group.name] if group.name in scores else 0,
         }), include_groups=False).sort_values(by="total_score", ascending=False)
 
         st.dataframe(summary_df)
