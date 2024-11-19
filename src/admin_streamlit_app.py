@@ -148,6 +148,10 @@ def scavenger_admin():
         ## Title
         st.subheader("Map")
 
+        if not Path(LOGGING_FILE).exists():
+            st.write("No logging file found.")
+            return
+
         # load ndjson logging file
         with open(LOGGING_FILE, "r") as file:
             logs = pd.DataFrame([json.loads(line) for line in file])

@@ -73,7 +73,7 @@ def test_streamlit_valid_team_name(game):
 
     assert at.title[0].value == "Scavenger hunt 🕵"
     assert at.session_state["team_name"] == "Team"
-    assert at.columns[1].markdown[0].value == ": Team"
+    assert at.columns[3].markdown[0].value == ": Team"
 
     # Check if the team name is stored in the session state
     state_file = Path(constants.STATE_FILE)
@@ -133,7 +133,6 @@ def test_streamlit_normal_run(monkeypatch, game):
 
     # Iterate through stations
     for ix in range(len(game.locations)):
-
         state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
         goal_name = state.teams["Team"].goal_location_name
         goal = game.get_location_by_name(goal_name)
@@ -148,10 +147,10 @@ def test_streamlit_normal_run(monkeypatch, game):
 
         # Answer the question
         if goal.question_type == QuestionType.MultipleChoice:
-            at.button[0].click().run()  # Click the first button
+            at.button[1].click().run()  # Click the first button
         elif goal.question_type == QuestionType.OpenQuestion:
             at.text_input[0].input("Answer").run()  # Fill in the answer
-            at.button[0].click().run()  # Submit the answer
+            at.button[1].click().run()  # Submit the answer
 
     # Check if all locations are solved
     assert at.success[0].value == "Congratulations! You have found all the locations and answered all the questions. You are a true scavenger hunt master!"

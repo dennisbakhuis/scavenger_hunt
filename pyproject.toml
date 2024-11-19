@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scavenger"
-version = "0.1.0"
+version = "0.2.1"
 description = ""
 authors = ["Dennis Bakhuis <git@bakhuis.nu>"]
 readme = "README.md"
@@ -14,7 +14,6 @@ geopy = "^2.4.1"
 pyyaml = "^6.0.2"
 pandas = "^2.2.3"
 plotly = "^5.24.1"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
