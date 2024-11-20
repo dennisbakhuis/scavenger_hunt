@@ -40,15 +40,11 @@ def scavenger(team_name: str) -> None:
             "Welcome to the Advanced Analytics scavenger hunt! Your goal is to find the hidden locations and answer the questions to score points. Questions will only be revealed when you are within a certain distance of the goal location. When a question is answered correctly, the next location will be the closest one. When answered incorrectly, the next location will be the farthest one. Answer wisely!"
         )
 
-    top_column_1, top_column_2 = st.columns([1, 1])
-    with top_column_1:
-        st.write("Playing as team")
-        st.write("Solved locations")
-        st.write("Press button to get current location:")
-    with top_column_2:
-        st.write(f": {team_name}")
-        st.write(f": {len(team_state.solved)} / {len(game.locations)}")
-        location = streamlit_geolocation()
+    st.markdown("---")
+    st.markdown(f"**Playing as team  :** {team_name}")
+    st.markdown(f"**Solved locations :** {len(team_state.solved)} / {len(game.locations)}")
+    st.write("Press button to get current location  :")
+    location = streamlit_geolocation()
 
     ## Current goal location
     goal_location = game.get_location_by_name(team_state.goal_location_name)

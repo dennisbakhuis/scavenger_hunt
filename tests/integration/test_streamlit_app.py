@@ -77,7 +77,7 @@ def test_streamlit_valid_team_name(game):
 
     assert at.title[0].value == "Scavenger hunt 🕵"
     assert at.session_state["team_name"] == "Team"
-    assert at.columns[3].markdown[0].value == ": Team"
+    assert at.markdown[2].value.endswith("Team")
 
     # Check if the team name is stored in the session state
     state_file = Path(constants.STATE_FILE)
