@@ -8,6 +8,7 @@ Default values are provided for the following environment variables:
 
 If the environment variables are not set, the default values are used.
 """
+
 import os
 
 DEFAULT_GAME_FILE = "game_data/game.yaml"

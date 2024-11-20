@@ -1,4 +1,5 @@
 """Integration test for the admin Streamlit app."""
+
 import tempfile
 import json
 import yaml
@@ -95,8 +96,24 @@ def test_admin_streamlit_statistics_tab():
     at = AppTest.from_file(STREAMLIT_APP_FILE)
 
     team_data = [
-        {"team_name": "Team", "timestamp": "2024-11-19 14:16:10", "latitude": 50.36217626641079, "longitude": 7.604774011633124, "solved": 0, "current_goal": "Three switches, three bulbs", "beam_to_location": True},
-        {"team_name": "Johanna", "timestamp": "2024-11-19 15:39:45", "latitude": 50.35992338937352, "longitude": 7.600863034946477, "solved": 0, "current_goal": "Weighing Coins", "beam_to_location": True},
+        {
+            "team_name": "Team",
+            "timestamp": "2024-11-19 14:16:10",
+            "latitude": 50.36217626641079,
+            "longitude": 7.604774011633124,
+            "solved": 0,
+            "current_goal": "Three switches, three bulbs",
+            "beam_to_location": True,
+        },
+        {
+            "team_name": "Johanna",
+            "timestamp": "2024-11-19 15:39:45",
+            "latitude": 50.35992338937352,
+            "longitude": 7.600863034946477,
+            "solved": 0,
+            "current_goal": "Weighing Coins",
+            "beam_to_location": True,
+        },
     ]
 
     with open(constants.LOGGING_FILE, "w") as file:

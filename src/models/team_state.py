@@ -1,4 +1,5 @@
 """Model for the state of a team in the game."""
+
 from pydantic import BaseModel
 
 

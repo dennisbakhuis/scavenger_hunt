@@ -1,4 +1,5 @@
 """Model for a location in the game."""
+
 from pydantic import BaseModel
 
 from .answer_option import AnswerOption

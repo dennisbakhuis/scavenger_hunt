@@ -1,4 +1,5 @@
 """Tests for provided game data."""
+
 from pathlib import Path
 
 from models import Game

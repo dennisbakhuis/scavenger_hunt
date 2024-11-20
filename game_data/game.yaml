@@ -25,7 +25,7 @@ locations:
     longitude: 7.603953856477178
     question_type: "multiple choice"
     question: |
-      You are a contestant on a game show. There are three doors. Behind one of the doors is a car, behind the others, goats. You pick a door, say number 1, and the host, who knows what's behind the doors, opens another door, say number 3, which has a goat. He then says to you, "Do you still want to pick door number 1, or would you like to switch to door number 2?" 
+      You are a contestant on a game show. There are three doors. Behind one of the doors is a car, behind the others, goats. You pick a door, say number 1, and the host, who knows what's behind the doors, opens another door, say number 3, which has a goat. He then says to you, "Do you still want to pick door number 1, or would you like to switch to door number 2?"
 
       What will you do?
     answer:
@@ -45,7 +45,7 @@ locations:
     longitude: 7.604683879206725
     question_type: "multiple choice"
     question: |
-      Mr. and mrs. Smith have two children. The youngest of the two children is a girl. 
+      Mr. and mrs. Smith have two children. The youngest of the two children is a girl.
 
       What is the probability that the older child is also a girl?
     answer:
@@ -81,8 +81,8 @@ locations:
     longitude: 7.604595520183715
     question_type: "open question"
     question: |
-      A farmer needs to get a wolf, a goat, and a cabbage across a river using a boat that can only carry the farmer and one item at a time. If left unattended together, the wolf will eat the goat, and the goat will eat the cabbage.    
-      
+      A farmer needs to get a wolf, a goat, and a cabbage across a river using a boat that can only carry the farmer and one item at a time. If left unattended together, the wolf will eat the goat, and the goat will eat the cabbage.
+
       What is the minimum number of crossings the farmer must make to get all three items safely across the river?
     answer:
       - option: "7"
@@ -99,8 +99,8 @@ locations:
     longitude: 7.604774011633124
     question_type: "multiple choice"
     question: |
-      You are in a room with 3 light switches, each connected to a different bulb in another room. You cannot see the bulbs from where you are. You can turn the switches on or off in any combination. After that, you may enter the room with the bulbs only once. Using your observations, you aim to determine which switch controls which bulb.      
-      
+      You are in a room with 3 light switches, each connected to a different bulb in another room. You cannot see the bulbs from where you are. You can turn the switches on or off in any combination. After that, you may enter the room with the bulbs only once. Using your observations, you aim to determine which switch controls which bulb.
+
       What is the maximum number of bulbs for which you can uniquely determine the switch-to-bulb assignments using this method?
     answer:
       - option: "0"
@@ -150,7 +150,7 @@ locations:
       Four people need to cross a dangerous bridge at night. They have only **one torch**, which is necessary to see the way across and must be carried every time someone crosses. The bridge can hold at most two people at once, and they cannot cross without the torch. The torch cannot be thrown or left unattended.
 
       Each person walks at a different speed:
-      
+
       - Person A: 1 minute to cross
       - Person B: 2 minutes to cross
       - Person C: 5 minutes to cross

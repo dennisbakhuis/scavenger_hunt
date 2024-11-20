@@ -1,4 +1,4 @@
-# Scavenger hunt 
+# Scavenger hunt
 Build for TenneT - BTO - DD - Advanced Analytics - offsite November 2024
 
 ## Build container

@@ -1,4 +1,5 @@
 """Integration test for the Streamlit app."""
+
 import tempfile
 import threading
 from copy import deepcopy
@@ -38,7 +39,7 @@ def game():
 def test_streamlit_load_test_with_m_teams(monkeypatch, game):
     """Load test with M teams playing concurrently using multithreading."""
     M_TEAMS = 10  # Number of teams to simulate
-    N_STEPS = 5   # Number of steps to move towards each goal
+    N_STEPS = 5  # Number of steps to move towards each goal
 
     team_names = [f"Team{i+1}" for i in range(M_TEAMS)]
     teams_completed = set()
@@ -70,9 +71,7 @@ def test_streamlit_load_test_with_m_teams(monkeypatch, game):
             }
 
         # Monkeypatch within the team's thread
-        monkeypatch.setattr(
-            "streamlit_geolocation.streamlit_geolocation", get_coordinates
-        )
+        monkeypatch.setattr("streamlit_geolocation.streamlit_geolocation", get_coordinates)
 
         # Retrieve the game copy for this team
         team_game = game_copies[team_name]

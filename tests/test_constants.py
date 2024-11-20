@@ -1,10 +1,18 @@
 """Test project constants."""
+
 import importlib
 
 
 def test_constants():
     """Test that the constants are set."""
-    from constants import GAME_FILE, STATE_FILE, LOGGING_FILE, DEFAULT_GAME_FILE, DEFAULT_STATE_FILE, DEFAULT_LOGGING_FILE
+    from constants import (
+        GAME_FILE,
+        STATE_FILE,
+        LOGGING_FILE,
+        DEFAULT_GAME_FILE,
+        DEFAULT_STATE_FILE,
+        DEFAULT_LOGGING_FILE,
+    )
 
     assert isinstance(GAME_FILE, str)
     assert isinstance(STATE_FILE, str)
@@ -22,6 +30,7 @@ def test_overwritten_constants(monkeypatch):
     monkeypatch.setenv("LOGGING_FILE", "test_log.ndjson")
 
     import constants as constants
+
     importlib.reload(constants)
 
     assert constants.GAME_FILE == "test_game.yaml"

@@ -1,4 +1,5 @@
 """Method to calculate the bearing between two geographic coordinates."""
+
 import math
 
 
@@ -29,7 +30,9 @@ def calculate_bearing(location_1, location_2):
     delta_longitude = longitude_2 - longitude_1
 
     x_component = math.sin(delta_longitude) * math.cos(latitude_2)
-    y_component = math.cos(latitude_1) * math.sin(latitude_2) - math.sin(latitude_1) * math.cos(latitude_2) * math.cos(delta_longitude)
+    y_component = math.cos(latitude_1) * math.sin(latitude_2) - math.sin(latitude_1) * math.cos(
+        latitude_2
+    ) * math.cos(delta_longitude)
 
     initial_bearing_radians = math.atan2(x_component, y_component)
 

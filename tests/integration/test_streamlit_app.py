@@ -1,4 +1,5 @@
 """Integration test for the Streamlit app."""
+
 import tempfile
 from pathlib import Path
 
@@ -60,7 +61,9 @@ def test_streamlit_fill_team_name_wrong_characters():
     ]:
         at.text_input[0].input(wrong_name).run()
         at.button[0].click().run()
-        assert at.error[0].value.startswith("Team name can only contain uppercase and lowercase letters.")
+        assert at.error[0].value.startswith(
+            "Team name can only contain uppercase and lowercase letters."
+        )
 
 
 def test_streamlit_valid_team_name(game):

@@ -1,4 +1,5 @@
 """Tests for the handle_question function."""
+
 from unittest.mock import MagicMock, patch
 from pathlib import Path
 
@@ -6,7 +7,13 @@ import pytest
 import streamlit as st
 
 from models import Location, TeamState, Game, State, QuestionType, AnswerOption
-from helpers.handle_question import handle_answer_submission, handle_button_click, handle_question, display_question, update_team_state
+from helpers.handle_question import (
+    handle_answer_submission,
+    handle_button_click,
+    handle_question,
+    display_question,
+    update_team_state,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -19,13 +26,15 @@ def mock_streamlit():
     None
         Mocked Streamlit components are automatically used during test execution.
     """
-    with patch("streamlit.header"), \
-         patch("streamlit.subheader"), \
-         patch("streamlit.markdown"), \
-         patch("streamlit.image"), \
-         patch("streamlit.text_input", return_value="mocked_input"), \
-         patch("streamlit.button", return_value=False), \
-         patch("streamlit.rerun"):
+    with (
+        patch("streamlit.header"),
+        patch("streamlit.subheader"),
+        patch("streamlit.markdown"),
+        patch("streamlit.image"),
+        patch("streamlit.text_input", return_value="mocked_input"),
+        patch("streamlit.button", return_value=False),
+        patch("streamlit.rerun"),
+    ):
         yield
 
 
@@ -42,8 +51,28 @@ def mock_game():
     return Game(
         file_path="game.yaml",
         locations=[
-            Location(name="Park", latitude=0, longitude=0, options=[], description="", image="", question_type=QuestionType.MultipleChoice, question="", answer=[AnswerOption(option="A", score=10)]),
-            Location(name="Hotel", latitude=1, longitude=1, options=[], description="", image="", question_type=QuestionType.MultipleChoice, question="", answer=[AnswerOption(option="A", score=10)]),
+            Location(
+                name="Park",
+                latitude=0,
+                longitude=0,
+                options=[],
+                description="",
+                image="",
+                question_type=QuestionType.MultipleChoice,
+                question="",
+                answer=[AnswerOption(option="A", score=10)],
+            ),
+            Location(
+                name="Hotel",
+                latitude=1,
+                longitude=1,
+                options=[],
+                description="",
+                image="",
+                question_type=QuestionType.MultipleChoice,
+                question="",
+                answer=[AnswerOption(option="A", score=10)],
+            ),
         ],
         radius=100,
     )
@@ -91,7 +120,17 @@ def mock_goal_location():
     Location
         A mocked `Location` object representing the goal.
     """
-    return Location(name="Park", latitude=0, longitude=0, options=[], description="", image="image.png", question_type=QuestionType.MultipleChoice, question="What is the capital?", answer=[AnswerOption(option="A", score=10)])
+    return Location(
+        name="Park",
+        latitude=0,
+        longitude=0,
+        options=[],
+        description="",
+        image="image.png",
+        question_type=QuestionType.MultipleChoice,
+        question="What is the capital?",
+        answer=[AnswerOption(option="A", score=10)],
+    )
 
 
 def test_display_question(mock_goal_location):
@@ -134,16 +173,28 @@ def test_handle_answer_submission(mock_team_state, mock_goal_location, mock_game
     ]
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission("A", options, mock_team_state, mock_goal_location, mock_game, mock_state)
-        mock_update_team_state.assert_called_once_with(mock_team_state, 10, mock_goal_location, mock_game, mock_state)
+        handle_answer_submission(
+            "A", options, mock_team_state, mock_goal_location, mock_game, mock_state
+        )
+        mock_update_team_state.assert_called_once_with(
+            mock_team_state, 10, mock_goal_location, mock_game, mock_state
+        )
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission("b", options, mock_team_state, mock_goal_location, mock_game, mock_state)
-        mock_update_team_state.assert_called_once_with(mock_team_state, 5, mock_goal_location, mock_game, mock_state)
+        handle_answer_submission(
+            "b", options, mock_team_state, mock_goal_location, mock_game, mock_state
+        )
+        mock_update_team_state.assert_called_once_with(
+            mock_team_state, 5, mock_goal_location, mock_game, mock_state
+        )
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission("hello", options, mock_team_state, mock_goal_location, mock_game, mock_state)
-        mock_update_team_state.assert_called_once_with(mock_team_state, -10, mock_goal_location, mock_game, mock_state)
+        handle_answer_submission(
+            "hello", options, mock_team_state, mock_goal_location, mock_game, mock_state
+        )
+        mock_update_team_state.assert_called_once_with(
+            mock_team_state, -10, mock_goal_location, mock_game, mock_state
+        )
 
 
 def test_handle_button_click(mock_team_state, mock_goal_location, mock_game, mock_state):
@@ -164,10 +215,14 @@ def test_handle_button_click(mock_team_state, mock_goal_location, mock_game, moc
     option = AnswerOption(option="A", score=10)
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
         handle_button_click(option, mock_team_state, mock_goal_location, mock_game, mock_state)
-        mock_update_team_state.assert_called_once_with(mock_team_state, 10, mock_goal_location, mock_game, mock_state)
+        mock_update_team_state.assert_called_once_with(
+            mock_team_state, 10, mock_goal_location, mock_game, mock_state
+        )
 
 
-def test_update_team_state_with_locations(mock_team_state, mock_goal_location, mock_game, mock_state):
+def test_update_team_state_with_locations(
+    mock_team_state, mock_goal_location, mock_game, mock_state
+):
     """
     Test `update_team_state` function for transitioning between locations.
 

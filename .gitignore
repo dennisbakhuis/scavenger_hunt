@@ -27,6 +27,7 @@ htmlcov/
 coverage.xml
 *.cover
 *.py,cover
+.pytest_cache/
 
 # PyInstaller
 *.manifest
@@ -54,3 +55,4 @@ coverage.xml
 
 # Application
 state/
+private_data/participants.txt

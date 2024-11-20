@@ -1,4 +1,5 @@
 """Tests for the State model."""
+
 import tempfile
 import os
 import yaml
@@ -136,7 +137,10 @@ def test_save_state_with_retries(state_file, game):
         mocked_sleep.assert_not_called()
 
     # Simulate failure and retries
-    with patch("builtins.open", side_effect=IOError("Mocked IOError")) as mocked_file, patch("time.sleep") as mocked_sleep:
+    with (
+        patch("builtins.open", side_effect=IOError("Mocked IOError")) as mocked_file,
+        patch("time.sleep") as mocked_sleep,
+    ):
         state.save()
 
         assert mocked_sleep.call_count == 2

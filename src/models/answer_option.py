@@ -1,4 +1,5 @@
 """Model for an answer option in a question."""
+
 from pydantic import BaseModel
 
 

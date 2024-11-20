@@ -1,0 +1,9 @@
+#Each line should contain a name
+#Lines starting with # will be ignored
+Jaap
+Jan
+Janneke
+Jip
+John
+Joop
+Jolly Juggler

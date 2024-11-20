@@ -1,4 +1,5 @@
 """Method to determine the next location for a team based on their current state, game information, and previous score."""
+
 from random import choice
 from geopy.distance import geodesic
 
@@ -32,11 +33,15 @@ def determine_next_location(
         If the previous score is positive, the closest location is returned. If the score is negative, the farthest location
         is returned. If the score is neutral (zero), a random unsolved location is chosen.
     """
-    unsolved_locations = [location for location in game.locations if location.name not in team_state.solved]
+    unsolved_locations = [
+        location for location in game.locations if location.name not in team_state.solved
+    ]
 
     sorted_by_distance = sorted(
         unsolved_locations,
-        key=lambda location: geodesic((location.latitude, location.longitude), current_location).meters
+        key=lambda location: geodesic(
+            (location.latitude, location.longitude), current_location
+        ).meters,
     )
 
     if previous_score > 0:
@@ -44,6 +49,6 @@ def determine_next_location(
     elif previous_score < 0:
         next_location = sorted_by_distance[-1]
     else:
-        next_location = choice(sorted_by_distance)
+        next_location = choice(sorted_by_distance)  # nosec
 
     return next_location.name

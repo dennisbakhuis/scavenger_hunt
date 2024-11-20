@@ -1,10 +1,11 @@
 """Log function to log to NDJSON file."""
+
 import json
 import time
 import random
 
 
-def log_ndjson(file_path, retry: int=10, **data) -> None:
+def log_ndjson(file_path, retry: int = 10, **data) -> None:
     """
     Log data to NDJSON file.
 
@@ -37,4 +38,4 @@ def log_ndjson(file_path, retry: int=10, **data) -> None:
             if attempt >= retry:
                 raise IOError(f"Failed to log data after {retry} attempts due to: {str(e)}") from e
 
-            time.sleep(random.uniform(0, 1))
+            time.sleep(random.uniform(0, 1))  # nosec

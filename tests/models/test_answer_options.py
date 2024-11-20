@@ -1,5 +1,7 @@
 """Tests for the `AnswerOption` class."""
+
 from models.answer_option import AnswerOption
+
 
 def test_answer_option_creation():
     """

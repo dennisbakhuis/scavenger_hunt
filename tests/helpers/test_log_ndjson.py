@@ -1,4 +1,5 @@
 """Tests for the log_ndjson function."""
+
 import os
 import json
 import tempfile
@@ -35,7 +36,11 @@ def test_log_ndjson_retry_on_failure():
 
     # Simulate the first two write attempts failing, then succeeding
     with patch("builtins.open", mock_open()) as mocked_open:
-        mocked_open.side_effect = [OSError("File error"), OSError("File error"), mock_open().return_value]
+        mocked_open.side_effect = [
+            OSError("File error"),
+            OSError("File error"),
+            mock_open().return_value,
+        ]
 
         # Call log_ndjson with retry logic
         log_ndjson("test_path.ndjson", retry=3, **data)

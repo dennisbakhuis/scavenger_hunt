@@ -10,8 +10,9 @@ RUN pip install --no-cache-dir "poetry==$POETRY_VERSION"
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-root
 
-COPY data/ data/
+COPY game_data/ game_data/
 COPY src/ src/
+RUN mkdir state
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 

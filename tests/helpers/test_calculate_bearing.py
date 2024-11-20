@@ -1,4 +1,5 @@
 """Tests for the calculate_bearing function."""
+
 import math
 
 from helpers import calculate_bearing

@@ -1,8 +1,9 @@
 """Handle the display and answering of the question."""
+
 from pathlib import Path
 import streamlit as st
 from models import QuestionType, Location, TeamState, Game, State, AnswerOption
-from helpers import determine_next_location
+from .determine_next_location import determine_next_location
 
 
 def display_question(
@@ -58,7 +59,9 @@ def handle_answer_submission(
 
     score = next(
         (option.score for option in options if option.option.lower() == lowered_answer),
-        next((option.score for option in options if option.option in ["", "wrong"]), options[0].score)  # Default to the first option's score
+        next(
+            (option.score for option in options if option.option in ["", "wrong"]), options[0].score
+        ),  # Default to the first option's score
     )
     team_state.solved[goal_location.name] = score
 

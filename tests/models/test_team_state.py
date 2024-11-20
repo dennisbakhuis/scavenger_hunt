@@ -1,4 +1,5 @@
 """Tests for the State model."""
+
 from models.team_state import TeamState
 
 

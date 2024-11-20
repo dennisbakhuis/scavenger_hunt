@@ -1,4 +1,5 @@
 """Game state model."""
+
 from pathlib import Path
 from random import choice, uniform
 import time
@@ -132,7 +133,6 @@ class State(BaseModel):
 
         return state
 
-
     def save(self, retries: int = 3, min_wait: float = 0.5, max_wait: float = 2.0) -> None:
         """
         Save the game state to a YAML file with a retry mechanism.
@@ -158,7 +158,7 @@ class State(BaseModel):
             except (IOError, yaml.YAMLError) as e:
                 print(f"Attempt {attempt + 1} failed: {e}")
                 if attempt < retries - 1:  # Wait and retry
-                    wait_time = uniform(min_wait, max_wait)
+                    wait_time = uniform(min_wait, max_wait)  # nosec
                     print(f"Retrying in {wait_time:.2f} seconds...")
                     time.sleep(wait_time)
                 else:
@@ -179,7 +179,7 @@ class State(BaseModel):
             The state of the team.
         """
         if not self.team_exists(team_name):
-            goal_location = choice(self._game.locations)
+            goal_location = choice(self._game.locations)  # nosec
             self.teams[team_name] = TeamState(
                 name=team_name,
                 goal_location_name=goal_location.name,

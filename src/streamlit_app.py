@@ -1,4 +1,5 @@
 """Advanced Analytics scavenger hunt application."""
+
 import re
 import time
 
@@ -35,7 +36,9 @@ def scavenger(team_name: str) -> None:
 
     ## Top section
     if len(team_state.solved) == 0:
-        st.write("Welcome to the Advanced Analytics scavenger hunt! Your goal is to find the hidden locations and answer the questions to score points. Questions will only be revealed when you are within a certain distance of the goal location. When a question is answered correctly, the next location will be the closest one. When answered incorrectly, the next location will be the farthest one. Answer wisely!")
+        st.write(
+            "Welcome to the Advanced Analytics scavenger hunt! Your goal is to find the hidden locations and answer the questions to score points. Questions will only be revealed when you are within a certain distance of the goal location. When a question is answered correctly, the next location will be the closest one. When answered incorrectly, the next location will be the farthest one. Answer wisely!"
+        )
 
     top_column_1, top_column_2 = st.columns([1, 1])
     with top_column_1:
@@ -62,7 +65,9 @@ def scavenger(team_name: str) -> None:
     ## Check if all locations are solved
     if len(team_state.solved) == len(game.locations):
         st.markdown("---")
-        st.success("Congratulations! You have found all the locations and answered all the questions. You are a true scavenger hunt master!")
+        st.success(
+            "Congratulations! You have found all the locations and answered all the questions. You are a true scavenger hunt master!"
+        )
         return
 
     ## Location information
@@ -108,7 +113,10 @@ def scavenger(team_name: str) -> None:
         )
     else:
         st.subheader("Question")
-        st.write(f"You need to be within {game.radius} meters of the goal location to see the question.")
+        st.write(
+            f"You need to be within {game.radius} meters of the goal location to see the question."
+        )
+
 
 def login_page() -> None:
     """Login page for the scavenger hunt."""
@@ -119,7 +127,9 @@ def login_page() -> None:
         if team_name and re.match("^[A-Za-z]+$", team_name):
             st.session_state.team_name = team_name
         else:
-            st.error("Team name can only contain uppercase and lowercase letters. No numbers, spaces, or special characters.")
+            st.error(
+                "Team name can only contain uppercase and lowercase letters. No numbers, spaces, or special characters."
+            )
 
     team_name = st.text_input(
         label="Enter your team name (only letters allowed):",

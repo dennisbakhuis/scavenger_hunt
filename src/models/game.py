@@ -1,4 +1,5 @@
 """Game model for the API."""
+
 import yaml
 
 from pydantic import BaseModel, PrivateAttr
@@ -23,12 +24,10 @@ class Game(BaseModel):
 
     _file_path: str = PrivateAttr(init=True)
 
-
     def __init__(self, file_path: str, **data):
         """Initialize the game object."""
         super().__init__(**data)
         self._file_path = file_path
-
 
     @classmethod
     def from_yaml_file(cls, file_path: str) -> "Game":

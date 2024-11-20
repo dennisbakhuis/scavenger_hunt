@@ -1,4 +1,5 @@
 """Tests for the Game model."""
+
 import tempfile
 import yaml
 import pytest
@@ -66,9 +67,9 @@ def sample_game_data() -> dict:
                 "question": "Test Location B",
                 "image": "image_b.png",
                 "answer": [{"option": "Option B", "score": 20}],
-            }
+            },
         ],
-        "radius": 100
+        "radius": 100,
     }
 
 
