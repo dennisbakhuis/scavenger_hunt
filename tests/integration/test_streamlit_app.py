@@ -3,6 +3,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from geopy.distance import geodesic
 from streamlit.testing.v1 import AppTest
 
 from models import State, Game, QuestionType
@@ -109,13 +110,15 @@ def test_streamlit_button_beam_to_location(game):
     assert at.subheader[-2].value == goal_name
 
 
-def test_streamlit_normal_run(monkeypatch, game):
-    """Test for a single user to go through all the stations."""
+def test_streamlit_normal_run_with_steps(monkeypatch, game):
+    """Test for a single user to go through all the stations with incremental GPS updates."""
+    N_STEPS = 5
+
     at = AppTest.from_file(STREAMLIT_APP_FILE)
     at.session_state["team_name"] = "Team"
     at.run()
 
-    # Not yet at questin location
+    # Not yet at question location
     assert at.markdown[-1].value.startswith("You need to be within")
 
     # Patch location system
@@ -123,7 +126,7 @@ def test_streamlit_normal_run(monkeypatch, game):
     latitude, longitude = 0, 0
 
     def get_coordinates():
-        """Map coordinates for the current goal in dict."""
+        """Map coordinates for the current location."""
         return {
             "latitude": latitude,
             "longitude": longitude,
@@ -138,12 +141,26 @@ def test_streamlit_normal_run(monkeypatch, game):
         goal = game.get_location_by_name(goal_name)
 
         print(f"Goal {ix+1:<2}: {goal_name}")
-        latitude, longitude = goal.latitude, goal.longitude
 
-        at.run()
+        # Simulate moving towards the goal in n_steps
+        start_latitude, start_longitude = latitude, longitude
+        delta_lat = (goal.latitude - start_latitude) / N_STEPS
+        delta_lon = (goal.longitude - start_longitude) / N_STEPS
 
-        # Check if question is showing
-        assert at.subheader[-2].value == goal_name
+        for _ in range(N_STEPS):
+            latitude += delta_lat
+            longitude += delta_lon
+            at.run()
+
+            distance = geodesic(
+                (latitude, longitude),
+                (goal.latitude, goal.longitude),
+            ).meters
+
+            if distance > game.radius:
+                assert at.markdown[-1].value.startswith("You need to be within")
+            else:
+                assert at.subheader[-2].value == goal_name
 
         # Answer the question
         if goal.question_type == QuestionType.MultipleChoice:
@@ -153,4 +170,7 @@ def test_streamlit_normal_run(monkeypatch, game):
             at.button[1].click().run()  # Submit the answer
 
     # Check if all locations are solved
-    assert at.success[0].value == "Congratulations! You have found all the locations and answered all the questions. You are a true scavenger hunt master!"
+    assert at.success[0].value == (
+        "Congratulations! You have found all the locations and answered all the questions. "
+        "You are a true scavenger hunt master!"
+    )

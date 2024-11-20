@@ -26,12 +26,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "tests"]
-testpaths = ["tests"]
+testpaths = ["tests/**/test_*.py"]
 addopts = ["--import-mode=importlib"]
 filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.mypy]
-exclude = ['tests/', 'scripts/']
+exclude = ['tests/']
 ignore_missing_imports = true
 follow_imports = "silent"
 warn_redundant_casts = true
