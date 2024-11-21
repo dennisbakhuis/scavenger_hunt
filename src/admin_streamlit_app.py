@@ -100,6 +100,7 @@ def scavenger_admin():
 
         beam_to_location_button_visible = st.checkbox(
             label="Show `beam-to-location` checkbox in user interface",
+            value=state.button_beam_to_location_visible,
         )
         change_beam_to_location_if_state_exists(state, beam_to_location_button_visible)
 
