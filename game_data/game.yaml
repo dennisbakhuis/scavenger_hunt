@@ -65,7 +65,7 @@ locations:
     longitude: 7.606513150226778
     question_type: "open question"
     question: |
-      You have two hourglasses. One measures 7 minutes and costs 3 coins to flip, and the other measures 4 minutes and costs 1 coin to flip. Your goal is to measure exactly 9 minutes using these two hourglasses. Which of the following methods achieves this at the minimal total cost?
+      You have two hourglasses. One measures 7 minutes and costs 3 coins to flip, and the other measures 4 minutes and costs 1 coin to flip. Your goal is to measure exactly 9 minutes using these two hourglasses. What is the minimum number of coins you need to spend to achieve this?
     answer:
       - option: "11"
         score: 2
