@@ -50,11 +50,15 @@ locations:
       What is the probability that the older child is also a girl?
     answer:
       - option: "1/2"
+        score: 2
+      - option: "1/3"
         score: -1
       - option: "2/3"
         score: -1
-      - option: "1/3"
-        score: 2
+      - option: "1/4"
+        score: -1
+      - option: "3/4"
+        score: -1
     image: "3_two_kids.png"
     dont_know_answer:
       option: "I have no idea"
@@ -226,7 +230,7 @@ locations:
     dont_know_answer:
       option: "I have no idea"
       score: 0
-  - name: "Two father and two sons"
+  - name: "Two fathers and two sons"
     # 11. Am alten hospital: 50.361826544189796, 7.602262740468736
     latitude: 50.361826544189796
     longitude: 7.602262740468736
