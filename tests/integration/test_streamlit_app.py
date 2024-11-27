@@ -84,7 +84,9 @@ def test_streamlit_valid_team_name(game):
     assert state_file.exists()
 
     state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
-    assert state.teams["Team"].name == "Team"
+    teams = state.get_teams_as_dict()
+
+    assert teams["Team"].name == "Team"
 
 
 def test_streamlit_button_beam_to_location(game):
@@ -108,7 +110,9 @@ def test_streamlit_button_beam_to_location(game):
 
     # Turn checkbox on and check if beamed to location
     at.checkbox[0].check().run()
-    goal_name = state.teams["Team"].goal_location_name
+
+    teams = state.get_teams_as_dict()
+    goal_name = teams["Team"].goal_location_name
 
     assert at.subheader[-2].value == goal_name
 
@@ -140,7 +144,9 @@ def test_streamlit_normal_run_with_steps(monkeypatch, game):
     # Iterate through stations
     for ix in range(len(game.locations)):
         state = State.from_yaml_file(file_path=constants.STATE_FILE, game=game)
-        goal_name = state.teams["Team"].goal_location_name
+        teams = state.get_teams_as_dict()
+
+        goal_name = teams["Team"].goal_location_name
         goal = game.get_location_by_name(goal_name)
 
         print(f"Goal {ix+1:<2}: {goal_name}")

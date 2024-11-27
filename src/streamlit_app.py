@@ -22,7 +22,7 @@ state = State.from_yaml_file(file_path=STATE_FILE, game=game)
 #############
 def scavenger(team_name: str) -> None:
     """Application for the scavenger hunt."""
-    team_state = state.get_or_create_team(
+    team_state = state.get_or_create_team_state(
         team_name=team_name,
     )
 
@@ -105,7 +105,6 @@ def scavenger(team_name: str) -> None:
             goal_location=goal_location,
             team_state=team_state,
             game=game,
-            state=state,
         )
     else:
         st.subheader("Question")

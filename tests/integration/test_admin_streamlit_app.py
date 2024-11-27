@@ -52,22 +52,35 @@ def test_streamlit_overview_tab():
 
     data = """\
 button_beam_to_location_visible: false
-teams:
-  Team:
-    goal_location_name: Three switches, three bulbs
-    name: Dennis
-    solved:
-      Three doors: 1
-      Three switches, three bulbs: 1
-  Dennis:
-    goal_location_name: A wolf, a goat, and a cabbage
-    name: Johanna
-    solved:
-      A wolf, a goat, and a cabbage: -1
-      Bridge Crossing: 2
+next_location_mechanic: random
+"""
+    data_teama = """\
+goal_location_name: Three switches, three bulbs
+name: Dennis
+solved:
+    Three doors: 1
+    Three switches, three bulbs: 1
+"""
+    data_teamb = """\
+goal_location_name: A wolf, a goat, and a cabbage
+name: Johanna
+solved:
+    A wolf, a goat, and a cabbage: -1
+    Bridge Crossing: 2
 """
     with open(constants.STATE_FILE, "w") as f:
         f.write(f"{data}\n")
+
+    team_path = Path(constants.STATE_FILE).parent / "team_states"
+    team_path.mkdir()
+
+    team_a_file_path = Path(team_path / "Dennis.yaml")
+    with open(team_a_file_path, "w") as f:
+        f.write(f"{data_teama}\n")
+
+    team_b_file_path = Path(team_path / "Johanna.yaml")
+    with open(team_b_file_path, "w") as f:
+        f.write(f"{data_teamb}\n")
 
     at.run()
     assert not at.exception

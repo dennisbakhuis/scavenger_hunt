@@ -37,10 +37,13 @@ def scavenger_admin():
     with overview_tab:
         ## Team statistics
         st.subheader("Team statistics")
+
+        teams = state.get_teams_as_dict()
+
         if state.n_active_teams > 0:
             st.write(f"Number of registered teams: {state.n_active_teams}")
             team_statistics = []
-            for team in state.teams.values():
+            for team in teams.values():
                 current_goal = (
                     team.goal_location_name
                     if len(team.solved) < len(game.locations)
@@ -63,10 +66,10 @@ def scavenger_admin():
         st.subheader("Puzzle statistics")
         puzzle_statistics = []
         for ix, location in enumerate(game.locations):
-            n_teams_solved = sum(1 for team in state.teams.values() if location.name in team.solved)
+            n_teams_solved = sum(1 for team in teams.values() if location.name in team.solved)
             n_teams_correct = sum(
                 1
-                for team in state.teams.values()
+                for team in teams.values()
                 if location.name in team.solved and team.solved[location.name] > 0
             )
             n_teams_incorrect = n_teams_solved - n_teams_correct
@@ -83,7 +86,9 @@ def scavenger_admin():
 
         st.dataframe(data=puzzle_statistics, height=500)
 
-        ## Danger zone
+        #################
+        ## Danger zone ##
+        #################
         st.subheader("Danger zone")
         st.markdown(
             "**Enable beam-to-location for all teams.** All teams will see a beam to location checkbox when their UI refreshes. When this checkbox is enabled, you are automatically beamed to the current goal and can directly answer the question."
@@ -205,7 +210,7 @@ def scavenger_admin():
                 else 0
                 for location in game.locations
             }
-            for team_name, team_state in state.teams.items()
+            for team_name, team_state in teams.items()
         }
         scores = {
             team_name: sum(score for score in scores_collected[team_name].values())

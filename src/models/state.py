@@ -1,14 +1,24 @@
 """Game state model."""
 
+from enum import Enum
 from pathlib import Path
-from random import choice, uniform
-import time
+from random import choice
 
-from pydantic import BaseModel, PrivateAttr
+from pydantic import BaseModel, PrivateAttr, field_serializer
 import yaml
 
 from .team_state import TeamState
 from .game import Game
+
+
+class NextLocationMechanic(str, Enum):
+    """Mechanics for selecting the next location for a team."""
+
+    RANDOM = "random"
+    NEAREST = "nearest"
+    FURTHEST = "furthest"
+    NEAREST_WHEN_CORRECT = "nearest_when_correct"
+    FURTHEST_WHEN_CORRECT = "furthest_when_correct"
 
 
 class State(BaseModel):
@@ -17,8 +27,6 @@ class State(BaseModel):
 
     Parameters
     ----------
-    team_states : dict[str, TeamState], optional
-        A dictionary where keys are team names and values are their respective `TeamState` objects. Defaults to an empty dictionary.
     button_beam_to_location_visible : bool, optional (default=False)
         Adds a button to beam to goal location. Defaults to False.
 
@@ -28,9 +36,8 @@ class State(BaseModel):
         The number of currently active teams in the game.
     """
 
-    teams: dict[str, TeamState] = {}
-
     button_beam_to_location_visible: bool = False
+    next_location_mechanic: NextLocationMechanic = NextLocationMechanic.NEAREST_WHEN_CORRECT
 
     _file_path: str = PrivateAttr(init=True)
     _game: Game = PrivateAttr(init=True)
@@ -53,19 +60,32 @@ class State(BaseModel):
         """
         super().__init__(**data)
         self._file_path = file_path
+        self._team_state_path = Path(file_path).parent / "team_states"
         self._game = game
+
+        if not self._team_state_path.exists():
+            self._team_state_path.mkdir()
+
+        if not Path(self._file_path).exists():
+            self.save()
+
+    @field_serializer("next_location_mechanic")
+    def serialize_enum(self, next_location_mechanic: NextLocationMechanic, _) -> str:
+        """Serialize the mapping to a dict and use the Enum keys instead of values."""
+        return next_location_mechanic.value
 
     @property
     def n_active_teams(self):
         """
-        Returns the number of active teams.
+        Returns the number of registered teams.
 
         Returns
         -------
         int
             The number of teams currently active in the game.
         """
-        return len(self.teams)
+        team_states = self._team_state_path.glob("*.yaml")
+        return len(list(team_states))
 
     def team_exists(self, team_name: str) -> bool:
         """
@@ -81,16 +101,12 @@ class State(BaseModel):
         bool
             True if the team exists, False otherwise.
         """
-        return team_name in self.teams
+        team_state_file = self._team_state_path / f"{team_name}.yaml"
+        return team_state_file.exists()
 
-    def get_team_state(self, team_name: str) -> TeamState:
+    def get_or_create_team_state(self, team_name: str) -> TeamState:
         """
-        Get the state of a team by name.
-
-        Raises
-        ------
-        ValueError
-            If the team does not exist in the state.
+        Get the state of a team by name, creating it if it does not exist.
 
         Parameters
         ----------
@@ -102,10 +118,22 @@ class State(BaseModel):
         TeamState
             The state of the team.
         """
-        if self.team_exists(team_name):
-            return self.teams[team_name]
+        team_state_file = self._team_state_path / f"{team_name}.yaml"
 
-        raise ValueError(f"Team '{team_name}' does not exist in the game state.")
+        if team_state_file.exists():
+            with open(team_state_file, "r") as file:
+                team_data = yaml.safe_load(file)
+                return TeamState(
+                    file_path=str(team_state_file),
+                    **team_data,
+                )
+
+        goal_location = choice(self._game.locations)  # nosec
+        return TeamState(
+            file_path=str(self._team_state_path / f"{team_name}.yaml"),
+            name=team_name,
+            goal_location_name=goal_location.name,
+        )
 
     @classmethod
     def from_yaml_file(cls, file_path: str, game: Game) -> "State":
@@ -127,78 +155,37 @@ class State(BaseModel):
         if not Path(file_path).exists():
             state = cls(file_path=file_path, game=game)
         else:
-            with open(file_path, "r") as file:
-                state_data = yaml.safe_load(file)
+            with open(file_path, "r") as f:
+                state_data = yaml.safe_load(f)
                 state = cls(file_path=file_path, game=game, **state_data)
 
         return state
 
-    def save(self, retries: int = 3, min_wait: float = 0.5, max_wait: float = 2.0) -> None:
-        """
-        Save the game state to a YAML file with a retry mechanism.
+    def save(self) -> None:
+        """Save the game state to a YAML file."""
+        with open(self._file_path, "w") as f:
+            yaml.dump(
+                data=self.model_dump(),
+                stream=f,
+            )
 
-        Parameters
-        ----------
-        retries : int
-            Number of retry attempts in case of failure. Default is 3.
-        min_wait : float
-            Minimum wait time (in seconds) between retries. Default is 0.5 seconds.
-        max_wait : float
-            Maximum wait time (in seconds) between retries. Default is 2.0 seconds.
+    def get_teams_as_dict(self) -> dict:
         """
-        for attempt in range(retries):
-            try:
-                with open(self._file_path, "w") as file:
-                    yaml.dump(
-                        data=self.model_dump(),
-                        stream=file,
-                        default_flow_style=False,
-                    )
-                return
-            except (IOError, yaml.YAMLError) as e:
-                print(f"Attempt {attempt + 1} failed: {e}")
-                if attempt < retries - 1:  # Wait and retry
-                    wait_time = uniform(min_wait, max_wait)  # nosec
-                    print(f"Retrying in {wait_time:.2f} seconds...")
-                    time.sleep(wait_time)
-                else:
-                    print("Failed to save the game state after multiple attempts.")
-
-    def get_or_create_team(self, team_name: str) -> TeamState:
-        """
-        Get the state of a team by name, creating a new team if it does not exist.
-
-        Parameters
-        ----------
-        team_name : str
-            The name of the team.
+        Get all team states as a dictionary.
 
         Returns
         -------
-        TeamState
-            The state of the team.
+        dict
+            A dictionary where keys are team names and values are team states.
         """
-        if not self.team_exists(team_name):
-            goal_location = choice(self._game.locations)  # nosec
-            self.teams[team_name] = TeamState(
-                name=team_name,
-                goal_location_name=goal_location.name,
-            )
+        teams = {}
+        for team_state_file in self._team_state_path.glob("*.yaml"):
+            with open(team_state_file, "r") as file:
+                team_data = yaml.safe_load(file)
+                team_name = team_state_file.stem
+                teams[team_name] = TeamState(
+                    file_path=str(team_state_file),
+                    **team_data,
+                )
 
-            self.save()
-
-        return self.teams[team_name]
-
-    def update_team(self, team_name: str, new_state: TeamState) -> None:
-        """
-        Update the state of a team.
-
-        Parameters
-        ----------
-        team_name : str
-            The name of the team.
-        new_state : TeamState
-            The new state of the team.
-        """
-        self.teams[team_name] = new_state
-        self.save()
+        return teams

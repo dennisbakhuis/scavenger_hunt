@@ -2,14 +2,13 @@
 
 import tempfile
 import os
-import yaml
 from pathlib import Path
 from typing import Generator
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock
 
 import pytest
 
-from models import State, TeamState, Location, AnswerOption, QuestionType
+from models import State, TeamState, Location, AnswerOption, QuestionType, NextLocationMechanic
 
 
 @pytest.fixture
@@ -39,7 +38,6 @@ def state_file() -> Generator[str, None, None]:
 def test_state_creation(state_file, game):
     """Test the creation of the `State` class."""
     state = State(file_path=state_file, game=game)
-    assert state.teams == {}
     assert state.n_active_teams == 0
 
 
@@ -48,34 +46,29 @@ def test_team_exists(state_file, game):
     state = State(file_path=state_file, game=game)
     assert not state.team_exists("Team1")
 
-    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
-    assert state.team_exists("Team1")
+    team_state_file_path = state._team_state_path / "TeamA.yaml"
+    team_state_file_path.touch()
+    assert state.team_exists("TeamA")
 
 
-def test_get_team_state(state_file, game):
+def test_get_or_create_team_state(state_file, game):
     """Test the `get_team_state` method to ensure it returns the correct `TeamState`."""
     state = State(file_path=state_file, game=game)
-    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
 
-    assert state.get_team_state("Team1").name == "Team1"
+    # check when team already exists
+    team_state_file_path = state._team_state_path / "TeamA.yaml"
+    team_state = TeamState(
+        name="TeamA", goal_location_name=game.locations[0].name, file_path=team_state_file_path
+    )
 
-    with pytest.raises(ValueError):
-        state.get_team_state("NonExistingTeam")
+    loaded_team_state = state.get_or_create_team_state("TeamA")
+    assert loaded_team_state.name == team_state.name
 
-
-def test_get_or_create_team(state_file, game):
-    """Test the `get_or_create_team` method to ensure teams are created correctly if they do not exist."""
-    state = State(file_path=state_file, game=game)
-
-    # Test team creation
-    team_state = state.get_or_create_team("Team1")
-    assert team_state.name == "Team1"
-    assert team_state.goal_location_name == game.locations[0].name
-    assert state.teams["Team1"].name == "Team1"
-
-    # Test existing team retrieval
-    existing_team_state = state.get_or_create_team("Team1")
-    assert existing_team_state == team_state
+    # check when team does not exist
+    assert not state.team_exists("TeamB")
+    new_team_state = state.get_or_create_team_state("TeamB")
+    assert new_team_state.name == "TeamB"
+    assert state.team_exists("TeamB")
 
 
 def test_state_from_yaml(state_file, game):
@@ -85,80 +78,14 @@ def test_state_from_yaml(state_file, game):
         os.remove(state_file)  # Ensure the file does not exist before the test
 
     state = State.from_yaml_file(state_file, game)
-    assert state.teams == {}
+    assert not state.button_beam_to_location_visible
+    assert state.next_location_mechanic == NextLocationMechanic.NEAREST_WHEN_CORRECT
 
-    # Test saving the state
-    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
+    state.button_beam_to_location_visible = True
+    state.next_location_mechanic = NextLocationMechanic.RANDOM
     state.save()
 
-    # Now test loading from an existing file
-    loaded_state = State.from_yaml_file(state_file, game)
-    assert "Team1" in loaded_state.teams
-    assert loaded_state.teams["Team1"].name == "Team1"
+    assert Path(state_file).exists()
 
-
-def test_save_state(state_file, game):
-    """Test the `save` method to ensure the state is correctly saved to a YAML file."""
-    state = State(file_path=state_file, game=game)
-    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
-
-    state.save()
-
-    with open(state_file, "r") as file:
-        loaded_data = yaml.safe_load(file)
-        assert "Team1" in loaded_data["teams"]
-
-
-def test_save_state_with_retries(state_file, game):
-    """Test the `save` method to ensure the state is correctly saved to a YAML file with retries."""
-    state = State(file_path=state_file, game=game)
-    state.teams["Team1"] = TeamState(name="Team1", goal_location_name=game.locations[0].name)
-
-    # Mock the open and time.sleep calls to simulate retry behavior
-    with (
-        patch("builtins.open", mock_open()) as mocked_file,
-        patch("time.sleep") as mocked_sleep,
-        patch("yaml.dump") as mocked_yaml_dump,
-    ):
-        state.save()
-
-        # Verify that the file was opened in write mode
-        mocked_file.assert_called_with(state_file, "w")
-
-        # Verify the content written to the file
-        handle = mocked_file()
-        mocked_yaml_dump.assert_called_once_with(
-            data=state.model_dump(),
-            stream=handle,
-            default_flow_style=False,
-        )
-
-        # Verify time.sleep is not called (indicating no retries occurred)
-        mocked_sleep.assert_not_called()
-
-    # Simulate failure and retries
-    with (
-        patch("builtins.open", side_effect=IOError("Mocked IOError")) as mocked_file,
-        patch("time.sleep") as mocked_sleep,
-    ):
-        state.save()
-
-        assert mocked_sleep.call_count == 2
-        assert mocked_file.call_count == 3
-
-
-def test_update_team(state_file, game):
-    """Test the `update_team` method to ensure the team state is updated and saved."""
-    state = State(file_path=state_file, game=game)
-    new_team_state = TeamState(name="Team1", goal_location_name=game.locations[0].name)
-
-    state.update_team("Team1", new_team_state)
-
-    # Check the internal state
-    assert state.teams["Team1"] == new_team_state
-
-    # Check that the updated state is saved
-    with open(state_file, "r") as file:
-        saved_data = yaml.safe_load(file)
-        assert "Team1" in saved_data["teams"]
-        assert saved_data["teams"]["Team1"]["name"] == "Team1"
+    new_state = State.from_yaml_file(state_file, game)
+    assert new_state.button_beam_to_location_visible

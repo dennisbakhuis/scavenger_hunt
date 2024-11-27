@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import streamlit as st
-from models import QuestionType, Location, TeamState, Game, State, AnswerOption
+from models import QuestionType, Location, TeamState, Game, AnswerOption
 from .determine_next_location import determine_next_location
 
 
@@ -35,7 +35,6 @@ def handle_answer_submission(
     team_state: TeamState,
     goal_location: Location,
     game: Game,
-    state: State,
 ):
     """
     Handle answer submission for open questions.
@@ -50,10 +49,6 @@ def handle_answer_submission(
         The state of the team submitting the answer.
     goal_location : Location
         The current goal location being processed.
-    game : Game
-        The game instance containing game-wide data.
-    state : State
-        The state object used to update team progress.
     """
     lowered_answer = answer.lower()
 
@@ -65,7 +60,7 @@ def handle_answer_submission(
     )
     team_state.solved[goal_location.name] = score
 
-    update_team_state(team_state, score, goal_location, game, state)
+    update_team_state(team_state, score, goal_location, game)
 
 
 def handle_button_click(
@@ -73,7 +68,6 @@ def handle_button_click(
     team_state: TeamState,
     goal_location: Location,
     game: Game,
-    state: State,
 ):
     """
     Handle button click for multiple-choice or 'don't know' answers.
@@ -92,7 +86,7 @@ def handle_button_click(
         The state object used to update team progress.
     """
     team_state.solved[goal_location.name] = option.score
-    update_team_state(team_state, option.score, goal_location, game, state)
+    update_team_state(team_state, option.score, goal_location, game)
 
 
 def update_team_state(
@@ -100,7 +94,6 @@ def update_team_state(
     score: int,
     goal_location: Location,
     game: Game,
-    state: State,
 ):
     """
     Update the team state and determine the next goal location.
@@ -127,10 +120,10 @@ def update_team_state(
         )
         team_state.goal_location_name = next_goal_location_name
 
-    state.update_team(team_state.name, team_state)
+    team_state.save()
 
 
-def handle_question(goal_location: Location, team_state: TeamState, game: Game, state: State):
+def handle_question(goal_location: Location, team_state: TeamState, game: Game):
     """
     Handle the display and interaction of the question.
 
@@ -159,7 +152,6 @@ def handle_question(goal_location: Location, team_state: TeamState, game: Game, 
                     team_state=team_state,
                     goal_location=goal_location,
                     game=game,
-                    state=state,
                 ),
             )
     elif goal_location.question_type == QuestionType.OpenQuestion:
@@ -172,7 +164,6 @@ def handle_question(goal_location: Location, team_state: TeamState, game: Game, 
                 team_state=team_state,
                 goal_location=goal_location,
                 game=game,
-                state=state,
             ),
         )
 
@@ -184,6 +175,5 @@ def handle_question(goal_location: Location, team_state: TeamState, game: Game, 
                 team_state=team_state,
                 goal_location=goal_location,
                 game=game,
-                state=state,
             ),
         )

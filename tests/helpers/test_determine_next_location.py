@@ -1,6 +1,7 @@
 """Tests for the determine_next_location function."""
 
 from random import seed
+import tempfile
 
 import pytest
 from unittest.mock import MagicMock
@@ -42,11 +43,13 @@ def mock_game() -> MagicMock:
 @pytest.fixture
 def mock_team_state() -> TeamState:
     """Create a mock TeamState object for testing."""
-    return TeamState(
-        name="Team X",
-        goal_location_name="Location A",
-        solved={},
-    )
+    with tempfile.TemporaryDirectory() as temp_dir:
+        yield TeamState(
+            name="Team A",
+            goal_location_name="Location A",
+            solved={},
+            file_path=f"{temp_dir}/team_state.yaml",
+        )
 
 
 def test_next_location_positive_score(mock_team_state, mock_game):

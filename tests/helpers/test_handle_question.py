@@ -2,6 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 from pathlib import Path
+import tempfile
 
 import pytest
 import streamlit as st
@@ -103,11 +104,13 @@ def mock_team_state():
     TeamState
         A mocked `TeamState` object.
     """
-    return TeamState(
-        name="Team A",
-        goal_location_name="Park",
-        solved={},
-    )
+    with tempfile.TemporaryDirectory() as temp_dir:
+        yield TeamState(
+            name="Team A",
+            goal_location_name="Park",
+            solved={},
+            file_path=f"{temp_dir}/team_a.yaml",
+        )
 
 
 @pytest.fixture
@@ -151,7 +154,7 @@ def test_display_question(mock_goal_location):
         st.image.assert_called_once()
 
 
-def test_handle_answer_submission(mock_team_state, mock_goal_location, mock_game, mock_state):
+def test_handle_answer_submission(mock_team_state, mock_goal_location, mock_game):
     """
     Test the `handle_answer_submission` function.
 
@@ -173,31 +176,25 @@ def test_handle_answer_submission(mock_team_state, mock_goal_location, mock_game
     ]
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission(
-            "A", options, mock_team_state, mock_goal_location, mock_game, mock_state
-        )
+        handle_answer_submission("A", options, mock_team_state, mock_goal_location, mock_game)
         mock_update_team_state.assert_called_once_with(
-            mock_team_state, 10, mock_goal_location, mock_game, mock_state
+            mock_team_state, 10, mock_goal_location, mock_game
         )
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission(
-            "b", options, mock_team_state, mock_goal_location, mock_game, mock_state
-        )
+        handle_answer_submission("b", options, mock_team_state, mock_goal_location, mock_game)
         mock_update_team_state.assert_called_once_with(
-            mock_team_state, 5, mock_goal_location, mock_game, mock_state
+            mock_team_state, 5, mock_goal_location, mock_game
         )
 
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_answer_submission(
-            "hello", options, mock_team_state, mock_goal_location, mock_game, mock_state
-        )
+        handle_answer_submission("hello", options, mock_team_state, mock_goal_location, mock_game)
         mock_update_team_state.assert_called_once_with(
-            mock_team_state, -10, mock_goal_location, mock_game, mock_state
+            mock_team_state, -10, mock_goal_location, mock_game
         )
 
 
-def test_handle_button_click(mock_team_state, mock_goal_location, mock_game, mock_state):
+def test_handle_button_click(mock_team_state, mock_goal_location, mock_game):
     """
     Test the `handle_button_click` function.
 
@@ -214,15 +211,16 @@ def test_handle_button_click(mock_team_state, mock_goal_location, mock_game, moc
     """
     option = AnswerOption(option="A", score=10)
     with patch("helpers.handle_question.update_team_state") as mock_update_team_state:
-        handle_button_click(option, mock_team_state, mock_goal_location, mock_game, mock_state)
+        handle_button_click(option, mock_team_state, mock_goal_location, mock_game)
         mock_update_team_state.assert_called_once_with(
-            mock_team_state, 10, mock_goal_location, mock_game, mock_state
+            mock_team_state,
+            10,
+            mock_goal_location,
+            mock_game,
         )
 
 
-def test_update_team_state_with_locations(
-    mock_team_state, mock_goal_location, mock_game, mock_state
-):
+def test_update_team_state_with_locations(mock_team_state, mock_goal_location, mock_game):
     """
     Test `update_team_state` function for transitioning between locations.
 
@@ -238,12 +236,11 @@ def test_update_team_state_with_locations(
         Mocked state object.
     """
     mock_team_state.solved = {"Park": 10}
-    update_team_state(mock_team_state, 10, mock_goal_location, mock_game, mock_state)
-    mock_state.update_team.assert_called_once_with(mock_team_state.name, mock_team_state)
+    update_team_state(mock_team_state, 10, mock_goal_location, mock_game)
     assert mock_team_state.goal_location_name == "Hotel"
 
 
-def test_update_team_state_all_solved(mock_team_state, mock_goal_location, mock_game, mock_state):
+def test_update_team_state_all_solved(mock_team_state, mock_goal_location, mock_game):
     """
     Test `update_team_state` function when all locations are solved.
 
@@ -259,12 +256,11 @@ def test_update_team_state_all_solved(mock_team_state, mock_goal_location, mock_
         Mocked state object.
     """
     mock_team_state.solved = {"Park": 10, "Hotel": 10}
-    update_team_state(mock_team_state, 10, mock_goal_location, mock_game, mock_state)
-    mock_state.update_team.assert_called_once_with(mock_team_state.name, mock_team_state)
+    update_team_state(mock_team_state, 10, mock_goal_location, mock_game)
     assert mock_team_state.goal_location_name == "Park"
 
 
-def test_handle_question(mock_game, mock_team_state, mock_goal_location, mock_state):
+def test_handle_question(mock_game, mock_team_state, mock_goal_location):
     """
     Test `handle_question` function.
 
@@ -280,5 +276,5 @@ def test_handle_question(mock_game, mock_team_state, mock_goal_location, mock_st
         Mocked state object.
     """
     with patch("helpers.handle_question.display_question") as mock_display_question:
-        handle_question(mock_goal_location, mock_team_state, mock_game, mock_state)
+        handle_question(mock_goal_location, mock_team_state, mock_game)
         mock_display_question.assert_called_once_with(mock_goal_location, Path("images").parent)
