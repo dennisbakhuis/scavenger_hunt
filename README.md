@@ -14,8 +14,6 @@ This game was build for fun and was used during a team building event for TenneT
 - [x] Progress tracking
 - [x] Puzzles and locations can customized using yaml configuration files (not in the web app)
 
-Build for TenneT - BTO - DD - Advanced Analytics - offsite November 2024
-
 ## Docker
 ### Build container
 ```bash
