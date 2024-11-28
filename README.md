@@ -5,7 +5,7 @@ To track the progress of the game, there is also an admin streamlit app. This ap
 
 This game was build for fun and was used during a team building event for TenneT/BTO/Digital&Data/Advanced-Analytics in Koblenz.
 
-![screenshot](assets/app_screens.png.png)
+![Hands holding an Iphone and the both webapps.](assets/app_screens.png?raw=true "Screenshot of the webapps.")
 
 ## Features
 - [x] Web application for players
